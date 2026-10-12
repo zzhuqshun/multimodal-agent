@@ -1,0 +1,138 @@
+{
+  "date": "2026-10-12",
+  "scope": "synthetic transport and parsing smoke test; not an accuracy benchmark",
+  "synthetic": true,
+  "independent_human_transcription_review": false,
+  "unique_document_contents": 1,
+  "representations": [
+    "PNG",
+    "image-only PDF"
+  ],
+  "engine": {
+    "status": "READY",
+    "service": "smartfill-paddleocr-vl",
+    "pipeline": "PaddleOCR-VL-1.6",
+    "ocr_models": [
+      "PP-DocLayoutV3",
+      "PaddleOCR-VL-1.6-0.9B"
+    ],
+    "paddleocr": "3.7.0",
+    "paddlex": "3.7.2",
+    "paddlepaddle_gpu": "3.2.1",
+    "features": [
+      "ocr",
+      "layout",
+      "table",
+      "reading_order"
+    ],
+    "busy": false
+  },
+  "server_root": "/data/zhuqianshun_data/server/paddleocr-vl",
+  "software_lock": "docs/requirements-ocr.lock",
+  "versions": {
+    "python": "3.12.14",
+    "paddleocr": "3.7.0",
+    "paddlex": "3.7.2",
+    "paddlepaddle_gpu": "3.2.1",
+    "cuda_build": "12.6"
+  },
+  "allocator": {
+    "strategy": "naive_best_fit",
+    "initial_mb": 10240,
+    "reallocate_mb": 1024,
+    "limit_mb": 12288
+  },
+  "previous_failure": "native auto_growth requests repeatedly timed out in the embedding kernel; models loaded but inference was not usable",
+  "workaround_source": "https://github.com/PaddlePaddle/PaddleOCR/issues/17693",
+  "final_runs": [
+    {
+      "source": "synthetic-table-v2.png",
+      "response": "runs/ocr-smoke-20261012/final-1.json",
+      "sha256": "ce092fb36925c9bac645299d76714ecdbfdb338d977b25d909b375a3d60bf0d2",
+      "elapsed_seconds": 4.840011449996382,
+      "pages": 1,
+      "blocks": 6,
+      "table_cells_checked": 9,
+      "name_match": true,
+      "passport_match": true,
+      "table_rows_exact": true,
+      "region_bounds_valid": true,
+      "table_block_order": null
+    },
+    {
+      "source": "synthetic-table-v2.png",
+      "response": "runs/ocr-smoke-20261012/final-2.json",
+      "sha256": "ce092fb36925c9bac645299d76714ecdbfdb338d977b25d909b375a3d60bf0d2",
+      "elapsed_seconds": 3.7307156128808856,
+      "pages": 1,
+      "blocks": 6,
+      "table_cells_checked": 9,
+      "name_match": true,
+      "passport_match": true,
+      "table_rows_exact": true,
+      "region_bounds_valid": true,
+      "table_block_order": null
+    },
+    {
+      "source": "synthetic-table-v2.png",
+      "response": "runs/ocr-smoke-20261012/final-3.json",
+      "sha256": "ce092fb36925c9bac645299d76714ecdbfdb338d977b25d909b375a3d60bf0d2",
+      "elapsed_seconds": 3.1622136449441314,
+      "pages": 1,
+      "blocks": 6,
+      "table_cells_checked": 9,
+      "name_match": true,
+      "passport_match": true,
+      "table_rows_exact": true,
+      "region_bounds_valid": true,
+      "table_block_order": null
+    },
+    {
+      "source": "synthetic-scan-v2.pdf",
+      "response": "runs/ocr-smoke-20261012/final-4.json",
+      "sha256": "b2c9e17523438c10b2ca228ecd17e2a6d29f26e8dd0e073f7072371ff258c26c",
+      "elapsed_seconds": 2.985418246127665,
+      "pages": 1,
+      "blocks": 6,
+      "table_cells_checked": 9,
+      "name_match": true,
+      "passport_match": true,
+      "table_rows_exact": true,
+      "region_bounds_valid": true,
+      "table_block_order": null
+    },
+    {
+      "source": "synthetic-scan-v2.pdf",
+      "response": "runs/ocr-smoke-20261012/final-5.json",
+      "sha256": "b2c9e17523438c10b2ca228ecd17e2a6d29f26e8dd0e073f7072371ff258c26c",
+      "elapsed_seconds": 2.519357781857252,
+      "pages": 1,
+      "blocks": 6,
+      "table_cells_checked": 9,
+      "name_match": true,
+      "passport_match": true,
+      "table_rows_exact": true,
+      "region_bounds_valid": true,
+      "table_block_order": null
+    }
+  ],
+  "final_runs_passed": 5,
+  "bad_upload_http_400_checks": 2,
+  "pytest_passed": 170,
+  "combined_start_reuses_healthy_services": true,
+  "qwen_main_pid_unchanged": true,
+  "running_ocr_environment_install_refused": true,
+  "snapshot_ocr_gpu_mib": 6746,
+  "snapshot_qwen_engine_gpu_mib": 24850,
+  "combined_cold_start_tested": false,
+  "combined_stop_tested": false,
+  "limitations": [
+    "same synthetic content repeated, not five independent documents",
+    "bounded max_new_tokens=1024 per region can truncate dense tables",
+    "no calibrated VLM recognition confidence is returned",
+    "table has region bbox and HTML rows/cells, no cell bboxes; table block_order is null",
+    "orientation/unwarping/chart/seal features disabled",
+    "not connected to ParsedDocument, Qwen semantic mapping, tools or form writeback",
+    "allocator workaround needs wider and longer regression, not a universal upstream fix"
+  ]
+}

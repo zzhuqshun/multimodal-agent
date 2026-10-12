@@ -7,12 +7,14 @@
 - Windows smartfill曾为迁移来源；已按用户要求于2026-10-12删除，后续仅使用WSL主目录。迁移以明文内容在Linux重建，未直接复制加密文件。
 - 权威来源：用户确认的飞书总体方案https://zcnna0f3aim6.feishu.cn/wiki/NNJWwoDnliiHy8kSHhicvUWfnVg ，机器人读取revision 10；正文在docs/overall-plan.md，交接在docs/handoff.md。
 - 13页方案PDF副本在docs/references/overall-plan.pdf，两张表在docs/assets；截断文字与链接目标未恢复。
-- 当前开发方向（用户2026-10-12确认）：OCR负责扫描件/图片文字识别，原生解析负责可读取文档；Qwen基于来源片段进行语义理解、字段关联、后续判断及工具选择，程序执行工具和确定性校验。先接通OCR，再做片段引用式语义映射和最小工具回路；现有文字提取策略保留为历史基线，运行默认尚未切换。
+- 当前开发方向（用户2026-10-12确认）：OCR负责扫描件/图片文字识别，原生解析负责可读取文档；Qwen基于来源片段进行语义理解、字段关联、后续判断及工具选择，程序执行工具和确定性校验。OCR采用PaddleOCR-VL-1.6完整解析流水线；独立服务接通后，先做ParsedDocument适配，再做片段引用式语义映射和最小工具回路；现有文字提取策略保留为历史基线，运行默认尚未切换。
 - GitHub目标：https://github.com/zzhuqshun/multimodal-agent.git。
 
 ## 当前状态
 
-- 职责与后续顺序已写入docs/ocr-and-agent-flow.md、AGENTS.md和README：实际OCR、片段引用式语义映射及Qwen工具选择/执行回路均未实现；现有固定规则执行不等同于模型调用工具。本次仅更新文档与约束，未修改代码、依赖或服务器。
+- 已在服务器/data/zhuqianshun_data/server/paddleocr-vl部署PP-DocLayoutV3 + PaddleOCR-VL-1.6（0.9B）完整流水线，独立Python/依赖/权重/缓存；127.0.0.1:18001提供解析服务，WSL转发及客户端已接通。原Qwen主进程1113117持续运行。统一start/status入口已验证复用；联合停止和两服务同时冷启动本轮未执行。
+- 最终相同虚构内容3次PNG/2次无文字层扫描PDF解析通过，耗时2.52–4.84秒，姓名/护照/3×3表格行列及区域边界核对通过；没有独立人工转录或泛化准确率结论。初始auto_growth请求多次超时，naive_best_fit修正后重复通过；完整170项pytest通过。报告docs/ocr-service-report.json，说明docs/ocr-runtime.md。
+- OCR服务输出尚未转换为ParsedDocument/填报CLI，片段引用式语义映射及Qwen工具选择/执行回路均未实现；现有固定规则执行不等同于模型调用工具。
 
 - 3模板/15组模拟开发数据已生成于data/dev/v0.1.0：A纵向PDF、B分组Excel、C横向PDF含两个访问项目；6正常、5冲突、4缺失，总计175字段、143文件。
 - 每组含可见input.json、documents及分离的ground_truth.json、annotations.json；manifest登记种子20261012、版本、模板族、实体、规则、异常与文件哈希。预测独立保存在runs/，原数据集内没有result.json；15组已完成Qwen材料提取基线独立评测，仍无独立人工核验；模型探针不计入任务评测。
@@ -20,18 +22,29 @@
 
 - 0.1.0数据契约已实现：Pydantic数据契约、跨对象引用/证据/状态/计算链校验、独立GroundTruth、文本原文件核验、JSON Schema导出和CLI。
 - data/examples/normal与conflict均为手工模拟样例，各含原始材料、输入、预构造结果和独立答案；正常样例5字段verified，冲突样例护照号码null并请求确认。
-- WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；当前159项测试通过（原138项及21项流程/统计保护检查）。
+- WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；当前170项测试通过（原159项及11项OCR输入/扫描PDF保护检查）。
 - data/dev、validation、holdout、external已建立，内容默认忽略Git；data/examples内虚构样例可提交。运行产物使用runs/，权重不放项目仓库。
 - 已初始化独立Git仓库及codex/contracts-baseline分支，origin指向用户仓库并建立跟踪，契约与开发数据实现已发布。通过现有Windows网关代理连通GitHub，已有SSH身份验证为zzhuqshun。
 - WSL可访问PyPI；Windows系统代理为localhost，WSL启动报告NAT模式未镜像该代理；仅为本项目设置Git代理和SSH推送方式，未更改Windows/WSL系统网络配置。
 - 远端Qwen3.5-9B已部署并运行在用户指定的/data/zhuqianshun_data/server/qwen3.5-9b；Python 3.12.14、vLLM 0.17.1、PyTorch 2.10.0+cu128、Transformers 4.57.6均为该目录独立环境。WSL经SSH本地转发访问127.0.0.1:18000，served ID为smartfill-qwen3.5-9b；真实文字与合成图片两轮探针均通过。配置示例在.env.example，本地.env忽略Git且CLI只读取导出的环境变量；报告在docs/server-connection-report.json。
-- CLI新增fill-rule、run-rule-baseline、evaluate；规则版从实际PDF矩形/Excel空白合并单元格识别字段，读取UTF-8参考文本并生成JSON草稿，先保存全部预测再打开答案。正式运行15题/175字段通过，190候选、13计算链通过，6题completed、9题needs_review、12个请求；详见docs/rule-baseline-report.json和docs/rule-baseline.md。物理证据核验已支持文本、PDF文本区域、Excel单元格；通用任意表单理解、OCR及文件写回尚未实现。
+- CLI新增fill-rule、run-rule-baseline、evaluate；规则版从实际PDF矩形/Excel空白合并单元格识别字段，读取UTF-8参考文本并生成JSON草稿，先保存全部预测再打开答案。正式运行15题/175字段通过，190候选、13计算链通过，6题completed、9题needs_review、12个请求；详见docs/rule-baseline-report.json和docs/rule-baseline.md。物理证据核验已支持文本、PDF文本区域、Excel单元格；通用任意表单理解、OCR到填报框架的适配及文件写回尚未实现。
 
 - Qwen首轮正式评测在runs/qwen-dev-v1-20261012：148/163可填字段值正确、146/175字段全通过、2/15整题通过；漏读来源使4个应拒填字段错误给值，1题原文校验失败。报告在docs/model-baseline-report.json；当前仅作为待核验草稿，不自动写回。服务器status-qwen.sh已安装验证，可显示本服务进程、GPU与接口状态。
 
 - 当前逐文档有限纠错版已独立评测：39/163可填字段值正确、44/175字段全通过、4/15整题通过、0错误给值，但11题failed，覆盖率不足；默认仅严格实验草稿模式。严格无纠错对照15/15被拒绝，全部结果与91次真实调用记录在docs/model-document-baseline-report.json；OCR仍未接入。
 
 ## 工作记录
+
+### 2026-10-12（独立PaddleOCR-VL部署、扫描解析与统一启动）
+
+- 根据用户强调表格/版面和视觉关系的选型要求，核验官方PP-OCRv6、PP-StructureV3与PaddleOCR-VL-1.6资料，最终采用PP-DocLayoutV3 + VL-1.6（0.9B）完整流水线配合原Qwen3.5-9B；未做Structure/v6准确率对照，不声称比较胜出。初始Structure环境目录调整为paddleocr-vl后重建独立环境，未向Qwen/系统环境混装依赖。
+- 服务器独立Python 3.12.14、PaddleOCR 3.7.0、PaddleX 3.7.2、Paddle GPU 3.2.1/cu126及114包依赖核验通过。官方BOS归档下载完成，本地来源/归档和文件SHA留在state/model-source.json；未取得发布方摘要，哈希仅作本地完整性记录。安装时临时代理转发已关闭，没有更改全局网络、HOME、驱动或其他应用环境。
+- 新增scripts/ocr-server.py、ocr-environment.sh、serve-ocr.sh、install-ocr-environment.sh、download-ocr-models.py、parse-document.py、make-ocr-smoke-fixture.py及start/status/stop-smartfill.sh，部署到授权server及paddleocr-vl目录。服务仅监听本机18001；单并发、文件/页数/像素限制、原始结果和来源哈希保留；停止脚本使用pidfd及精确命令身份，未实际执行联合停止。
+- 首次模型虽加载但推理在embedding处反复超时；依据上游issue 17693调整进程专属分配策略为naive_best_fit，初始10240MiB/增长1024MiB/限制12288MiB。首次恢复请求8.6秒；移除诊断钩子并重启仅本项目OCR后，最终WSL连续3次图片/2次扫描PDF请求成功，耗时2.52–4.84秒。未证明底层通用根因或长期稳定。
+- 虚构材料经PDF技能生成与渲染核验；初版字体缺失的夹具未计入结果，修正后的v2原图/扫描PDF无文字层。五次响应逐份核对姓名、护照、9个表格单元格与行顺序、区域边界和上传哈希，均通过；同一内容不计作5份独立样本，没有独立人工转录。VL原始table block_order为null，没有单元格bbox或经校准识字置信度，未补造信息。
+- 联合启动实测复用现有健康服务，Qwen主PID1113117不变、OCR最终PID2036137；状态脚本通过。活动OCR安装及模型下载脚本均拒绝修改运行中环境/模型；临时下载代理已关闭，解析不依赖该代理。最终快照OCR6746MiB、Qwen引擎24850MiB，GPU 3另有其他任务，共享资源仍有影响。未停止其他应用或重启Qwen。
+- 新增11项OCR输入/PDF渲染边界测试，完整170项pytest通过；实际非法base64/PDF均返回400，脚本语法与部署副本核验完成。新增docs/ocr-runtime.md、ocr-service-report.json、requirements-ocr.lock，同步README、AGENTS、流程与运行说明。原始响应/夹具/来源记录位于忽略的runs/ocr-smoke-20261012。
+- 尚未接入ParsedDocument、填报CLI、Qwen语义映射/工具回路或写回；未重跑历史模型批量实验。后续先完成来源片段适配与独立扫描评测。
 
 ### 2026-10-12（确认OCR识别、Qwen理解与工具执行分工）
 
@@ -159,11 +172,12 @@
 
 ## 关键决策
 
+- 扫描文档主方案采用PaddleOCR-VL-1.6完整流水线；文字、版面区域、表格HTML和原始来源一起保留。VL识别记origin=vlm，原生解析记parser；不补造识字置信度、单元格坐标或缺失阅读顺序。PP-OCRv6与VL-1.6版本号不可直接比较；实际能力由独立材料评测决定。
 - 用户要求后续全部在WSL开发，Linux目录为主目录，避免Windows加密链影响代码、依赖和上传。
 - schema_version固定0.1.0；值和定位使用kind判别类型。标准答案独立于预测ID与运行输入；未知字段被拒绝。
 - 异常字段最终建议为null并带对应动作；verified需要可追溯候选或计算链，只表示当前检查通过，不能证明OCR/语义正确。
 - 契约、开发集、规则/Qwen文字提取基线已有验证；后续优先OCR最小链路和独立识别评测，再实现片段引用式语义判断及最小工具执行回路。模型选择动作，程序执行工具并独立校验；LangGraph等框架按实际流程需要引入，不把完整框架作为OCR接入前提。
-- 框架与数据在WSL；模型权重、托管Python、独立依赖、缓存、临时文件及日志集中在服务器授权的qwen3.5-9b子目录，保留已有sam3_server；不修改系统Python/驱动或其他服务。模型仅监听服务器本机，通过SSH转发访问OpenAI兼容HTTP接口。
+- 框架与数据在WSL；模型权重、托管Python、独立依赖、缓存、临时文件及日志集中在服务器授权的qwen3.5-9b与paddleocr-vl独立子目录，保留已有sam3_server；不修改系统Python/驱动或其他服务。两服务仅监听服务器本机，通过SSH转发访问；Qwen提供OpenAI兼容接口，OCR提供独立JSON解析接口。
 - 首轮单请求策略保留；当前逐文档至多一次校验纠错，两次请求/回答/反馈均留痕，网络错误不重试，不回退规则；全部预测落盘后才加载答案。引用校验不能发现所有来源遗漏，流水线completed/verified不代表独立评测通过。
 - 开发数据生成器固定dev用途；相同种子、版本、字体和依赖下可复现。改变种子不产生新的模板族/独立留出实体。
 - 15组仅为开发里程碑；评测按模板族和实体隔离。总体方案300–500组完整任务目标保留，100–150组异常为其子集，人工核验可从留出集抽取。
@@ -172,16 +186,17 @@
 ## 待办与风险
 
 - GitHub连接已恢复，开发分支已上传；WSL网关IP变化后需刷新本仓库代理与SSH连接参数，详见README。
-- 优先接通OCR：准备独立标记的虚构图片/扫描材料与转录答案，核验引擎官方依赖后在服务器授权目录建立独立环境，转换为来源片段并保存位置/置信记录；现有扫描PDF缺少文本层，须补图像区域与识别记录核验，OCR识字正确性另评。之后将Qwen任务改为字段与片段引用的语义映射，最后接日期计算、校验、复核请求的最小工具回路；具体OCR引擎尚未选择。
+- 下一步将独立OCR-VL响应转换为ParsedDocument并核验原文件/页图/区域关联，保留表格行列及坐标转换。扩展独立扫描/旋转/拍照/密集表格样本及人工转录，分别评测文字与结构错误；当前五次调用仅同一合成内容，尚无真实准确率或长期稳定结论。随后进行Qwen片段语义映射和日期计算、校验、复核工具回路。
+- 原生Paddle推理曾卡住；分配策略修正后的重复测试通过，但客户端超时不会取消服务端推理，1024 tokens/区域上限可能截断密集表格。当前未启用方向分类、去畸变、图表和印章；没有校准置信分数、单元格bbox或完整阅读顺序。联合停止和两服务同时冷启动未实测，未设置系统自启动。
 - 逐文档实验仍有11/15题failed、可填字段正确覆盖39/163；减少模型抄写原文不能自动解决语义错配。保留历史对照，不用规则代填提高模型成绩；独立模板族/实体的验证集及人工核验仍待补充。
-- 仅支持受控布局的文本PDF/单工作表Excel及UTF-8参考材料；扫描/旋转PDF、Word、OCR、复杂Excel、多人员消歧及其他业务规则未实现。当前输出JSON草稿，未写回表单；异常跨字段推理证据评分受契约限制，引用一致性不能替代能力测试。
+- 仅支持受控布局的文本PDF/单工作表Excel及UTF-8参考材料；旋转/拍照PDF、Word、OCR框架适配、复杂Excel、多人员消歧及其他业务规则未实现。当前输出JSON草稿，未写回表单；异常跨字段推理证据评分受契约限制，引用一致性不能替代能力测试。
 - 服务器连接已核验，实际4×A100 80GB；GPU 0/2已有任务，当前模型使用GPU 3，单并发/8192上下文/显存规划0.32，快照占用25312MiB。共享资源仍有影响，启动空闲检查不能替代GPU调度；SSH转发断开需重建，未设置系统自启动。模型探针只确认连通与简单视觉输入，不能作为OCR或填报准确率。
 - 公开数据下载前补查截断许可列与官方链接；方案PDF未保留链接目标。
 - 两个手工样例独立于15组开发集；开发集仍为受控模板和单人员文本材料，所有human_reviewed=false，不用于未知模板泛化或真实业务结论。需要后续独立人工核验和隔离模板族/实体的留出集。
 
 ## 验证方式
 
-- 本轮为文档变更：执行git diff --check，核对新增文档本地链接、职责说明及日志六部分；未重跑代码测试或模型实验。
+- 本轮完整170项pytest通过；最终5次真实VL解析核对通过，2项非法HTTP输入400，统一启动复用/状态/运行中安装拒绝通过；脚本语法、部署副本SHA、明文和Git差异核验完成。联合停止与两服务同时冷启动未执行，未重跑历史Qwen批量评测。
 
 在WSL项目目录执行：
 
@@ -200,7 +215,7 @@ set +a
 git status --short
 ~~~
 
-- 当前159项测试包含原138项及21项逐文档覆盖、语义映射、有限纠错、用量缺失/中断/非法响应统计检查；契约测试覆盖往返序列化、引用/类型/状态/计算约束、独立答案、原文件哈希/引用核验及Schema确定性导出。
+- 当前170项测试包含原159项及11项OCR输入/PDF边界检查；原测试包括逐文档覆盖、语义映射、有限纠错、用量缺失/中断/非法响应统计检查；契约测试覆盖往返序列化、引用/类型/状态/计算约束、独立答案、原文件哈希/引用核验及Schema确定性导出。
 - 两个CLI样例通过；人工夹具timing=0不作为耗时测量。
 - Linux新进程检查Python语法、JSON解析与文件头，拒绝%TSD-Header；PDF与PNG以明文字节重建。
 - 历史来源核验：机器人读取revision 10；13页PDF已渲染查看第7–10页并查看第8、10页两表原图，没有线上写入。

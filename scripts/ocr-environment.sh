@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Source from the deployed OCR root. Do not modify the user's HOME.
+export UV_CACHE_DIR="$task_root/cache/uv"
+export TMPDIR="$task_root/tmp"
+export XDG_CACHE_HOME="$task_root/cache"
+export XDG_CONFIG_HOME="$task_root/config"
+export XDG_DATA_HOME="$task_root/runtime/data"
+export XDG_STATE_HOME="$task_root/state"
+export PADDLE_PDX_CACHE_HOME="$task_root/cache/paddlex"
+export PADDLE_HOME="$task_root/cache/paddle"
+export PADDLEOCR_HOME="$task_root/cache/paddleocr"
+export HF_HOME="$task_root/cache/huggingface"
+export MODELSCOPE_CACHE="$task_root/cache/modelscope"
+export MPLCONFIGDIR="$task_root/cache/matplotlib"
+export CUDA_CACHE_PATH="$task_root/cache/cuda"
+export PADDLE_PDX_MODEL_SOURCE=BOS
+export PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True
+export HF_HUB_DISABLE_TELEMETRY=1
+export DO_NOT_TRACK=1
+export OMP_NUM_THREADS=4
+export MKL_NUM_THREADS=4
+export OPENBLAS_NUM_THREADS=4
+export FLAGS_allocator_strategy=naive_best_fit
+export FLAGS_gpu_memory_limit_mb=12288
+export FLAGS_initial_gpu_memory_in_mb=10240
+export FLAGS_reallocate_gpu_memory_in_mb=1024
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
