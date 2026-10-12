@@ -1,0 +1,893 @@
+{
+  "date": "2026-10-12",
+  "scope": "model source extraction with shared physical form discovery and deterministic rules; development regression only",
+  "model_run": {
+    "tasks": 15,
+    "counts": {
+      "gold_fields": 175,
+      "predicted_fields": 166,
+      "fillable_gold": 163,
+      "refusal_gold": 12,
+      "gold_conflicts": 5,
+      "predicted_conflicts": 1,
+      "predicted_nonempty": 152,
+      "gold_candidates": 190,
+      "predicted_candidates": 150,
+      "evidence_gold": 163,
+      "calculation_gold": 13,
+      "identified": 166,
+      "matched_candidates": 150,
+      "aligned_fillable": 154,
+      "aligned_correct_values": 148,
+      "correct_evidence": 148,
+      "correct_states_actions": 156,
+      "conflict_tp": 1,
+      "fully_correct_fields": 146,
+      "correct_calculations": 11,
+      "wrong_fills": 4,
+      "correct_refusals": 8
+    },
+    "metrics": {
+      "field_precision": {
+        "numerator": 166,
+        "denominator": 166,
+        "value": 1.0
+      },
+      "field_recall": {
+        "numerator": 166,
+        "denominator": 175,
+        "value": 0.9485714285714286
+      },
+      "field_f1": {
+        "numerator": 332,
+        "denominator": 341,
+        "value": 0.9736070381231672
+      },
+      "aligned_value_accuracy": {
+        "numerator": 148,
+        "denominator": 154,
+        "value": 0.961038961038961
+      },
+      "end_to_end_value_recall": {
+        "numerator": 148,
+        "denominator": 163,
+        "value": 0.9079754601226994
+      },
+      "state_action_accuracy": {
+        "numerator": 156,
+        "denominator": 175,
+        "value": 0.8914285714285715
+      },
+      "wrong_fill_rate": {
+        "numerator": 4,
+        "denominator": 152,
+        "value": 0.02631578947368421
+      },
+      "conflict_precision": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "conflict_recall": {
+        "numerator": 1,
+        "denominator": 5,
+        "value": 0.2
+      },
+      "correct_refusal_rate": {
+        "numerator": 8,
+        "denominator": 12,
+        "value": 0.6666666666666666
+      },
+      "filled_field_evidence_accuracy": {
+        "numerator": 148,
+        "denominator": 163,
+        "value": 0.9079754601226994
+      },
+      "source_candidate_precision": {
+        "numerator": 150,
+        "denominator": 150,
+        "value": 1.0
+      },
+      "source_candidate_recall": {
+        "numerator": 150,
+        "denominator": 190,
+        "value": 0.7894736842105263
+      },
+      "calculation_chain_accuracy": {
+        "numerator": 11,
+        "denominator": 13,
+        "value": 0.8461538461538461
+      },
+      "full_field_pass_rate": {
+        "numerator": 146,
+        "denominator": 175,
+        "value": 0.8342857142857143
+      },
+      "task_pass_rate": {
+        "numerator": 2,
+        "denominator": 15,
+        "value": 0.13333333333333333
+      }
+    },
+    "task_statuses": {
+      "completed": 7,
+      "needs_review": 7,
+      "failed": 1
+    },
+    "pending_requests": 14,
+    "timing_ms": {
+      "sum": 151240.27428499903,
+      "median": 9372.664195000652,
+      "p95": 15492.39145699994
+    },
+    "failure_stages": {
+      "extraction": 1
+    },
+    "evaluation_scope": "controlled development tasks; evidence metric covers filled fields only; no generalization claim",
+    "run_id": "model-20261012-141818-70fd7518",
+    "dataset": "/home/user773/multimodal_agent/data/dev/v0.1.0",
+    "directory": "/home/user773/multimodal_agent/runs/qwen-dev-v1-20261012",
+    "baseline": "qwen-extraction-baseline-0.1.0",
+    "model_calls": 15,
+    "task_results": [
+      {
+        "task_id": "DEV-001",
+        "task_pass": true,
+        "task_status": "completed",
+        "result_path": "tasks/task-0001/result.json"
+      },
+      {
+        "task_id": "DEV-002",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0002/result.json"
+      },
+      {
+        "task_id": "DEV-003",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0003/result.json"
+      },
+      {
+        "task_id": "DEV-004",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0004/result.json"
+      },
+      {
+        "task_id": "DEV-005",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0005/result.json"
+      },
+      {
+        "task_id": "DEV-006",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0006/result.json"
+      },
+      {
+        "task_id": "DEV-007",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0007/result.json"
+      },
+      {
+        "task_id": "DEV-008",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0008/result.json"
+      },
+      {
+        "task_id": "DEV-009",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0009/result.json"
+      },
+      {
+        "task_id": "DEV-010",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0010/result.json"
+      },
+      {
+        "task_id": "DEV-011",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0011/result.json"
+      },
+      {
+        "task_id": "DEV-012",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0012/result.json"
+      },
+      {
+        "task_id": "DEV-013",
+        "task_pass": true,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0013/result.json"
+      },
+      {
+        "task_id": "DEV-014",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0014/result.json"
+      },
+      {
+        "task_id": "DEV-015",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0015/result.json"
+      }
+    ],
+    "model_id": "smartfill-qwen3.5-9b",
+    "prompt_version": "grounded-source-rows-1",
+    "token_usage": {
+      "input_tokens": {
+        "sum_reported": 15971,
+        "reported_tasks": 15,
+        "tasks": 15
+      },
+      "output_tokens": {
+        "sum_reported": 4907,
+        "reported_tasks": 15,
+        "tasks": 15
+      }
+    }
+  },
+  "comparison": {
+    "field_precision": {
+      "rule": {
+        "numerator": 175,
+        "denominator": 175,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 166,
+        "denominator": 166,
+        "value": 1.0
+      }
+    },
+    "field_recall": {
+      "rule": {
+        "numerator": 175,
+        "denominator": 175,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 166,
+        "denominator": 175,
+        "value": 0.9485714285714286
+      }
+    },
+    "field_f1": {
+      "rule": {
+        "numerator": 350,
+        "denominator": 350,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 332,
+        "denominator": 341,
+        "value": 0.9736070381231672
+      }
+    },
+    "aligned_value_accuracy": {
+      "rule": {
+        "numerator": 163,
+        "denominator": 163,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 148,
+        "denominator": 154,
+        "value": 0.961038961038961
+      }
+    },
+    "end_to_end_value_recall": {
+      "rule": {
+        "numerator": 163,
+        "denominator": 163,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 148,
+        "denominator": 163,
+        "value": 0.9079754601226994
+      }
+    },
+    "state_action_accuracy": {
+      "rule": {
+        "numerator": 175,
+        "denominator": 175,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 156,
+        "denominator": 175,
+        "value": 0.8914285714285715
+      }
+    },
+    "wrong_fill_rate": {
+      "rule": {
+        "numerator": 0,
+        "denominator": 163,
+        "value": 0.0
+      },
+      "model": {
+        "numerator": 4,
+        "denominator": 152,
+        "value": 0.02631578947368421
+      }
+    },
+    "conflict_precision": {
+      "rule": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      }
+    },
+    "conflict_recall": {
+      "rule": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 1,
+        "denominator": 5,
+        "value": 0.2
+      }
+    },
+    "correct_refusal_rate": {
+      "rule": {
+        "numerator": 12,
+        "denominator": 12,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 8,
+        "denominator": 12,
+        "value": 0.6666666666666666
+      }
+    },
+    "filled_field_evidence_accuracy": {
+      "rule": {
+        "numerator": 163,
+        "denominator": 163,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 148,
+        "denominator": 163,
+        "value": 0.9079754601226994
+      }
+    },
+    "source_candidate_precision": {
+      "rule": {
+        "numerator": 190,
+        "denominator": 190,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 150,
+        "denominator": 150,
+        "value": 1.0
+      }
+    },
+    "source_candidate_recall": {
+      "rule": {
+        "numerator": 190,
+        "denominator": 190,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 150,
+        "denominator": 190,
+        "value": 0.7894736842105263
+      }
+    },
+    "calculation_chain_accuracy": {
+      "rule": {
+        "numerator": 13,
+        "denominator": 13,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 11,
+        "denominator": 13,
+        "value": 0.8461538461538461
+      }
+    },
+    "full_field_pass_rate": {
+      "rule": {
+        "numerator": 175,
+        "denominator": 175,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 146,
+        "denominator": 175,
+        "value": 0.8342857142857143
+      }
+    },
+    "task_pass_rate": {
+      "rule": {
+        "numerator": 15,
+        "denominator": 15,
+        "value": 1.0
+      },
+      "model": {
+        "numerator": 2,
+        "denominator": 15,
+        "value": 0.13333333333333333
+      }
+    }
+  },
+  "prompt_sha256": "0f32d43b81a3ce0b81ab0a4c61825c09cc23749acfc080a7ecc4e35f075260f8",
+  "request_settings": {
+    "temperature": 0,
+    "max_tokens": 4096,
+    "stream": false,
+    "enable_thinking": false,
+    "retries": 0,
+    "fallback": false
+  },
+  "calls_this_stage": {
+    "formal": 15,
+    "pilot": 1,
+    "total": 16,
+    "pilot_usage": {
+      "prompt_tokens": 1022,
+      "total_tokens": 1328,
+      "completion_tokens": 306,
+      "prompt_tokens_details": null
+    }
+  },
+  "failure_details": [
+    {
+      "task_id": "DEV-002",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-departure",
+          "predicted_field_id": "field-0004",
+          "label": "拟离境日期",
+          "failed_checks": [
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-003",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        },
+        {
+          "gold_field_id": "gold-address",
+          "predicted_field_id": "field-0009",
+          "label": "邀请方地址",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-004",
+      "errors": [
+        {
+          "schema_version": "0.1.0",
+          "stage": "extraction",
+          "code": "model_baseline_error",
+          "message": "unsupported or invalid material/profile; no filling suggestions emitted"
+        }
+      ],
+      "fields": [
+        {
+          "gold_field_id": "gold-name",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-expiry",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-departure",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-return",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-days",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence",
+            "calculation"
+          ]
+        },
+        {
+          "gold_field_id": "gold-visa_start",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-visa_end",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-address",
+          "predicted_field_id": null,
+          "label": null,
+          "failed_checks": [
+            "structure",
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-005",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-006",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        },
+        {
+          "gold_field_id": "gold-departure",
+          "predicted_field_id": "field-0004",
+          "label": "计划出发日",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-return",
+          "predicted_field_id": "field-0005",
+          "label": "返回日期",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        },
+        {
+          "gold_field_id": "gold-days",
+          "predicted_field_id": "field-0006",
+          "label": "出访天数",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "evidence",
+            "calculation"
+          ]
+        },
+        {
+          "gold_field_id": "gold-address",
+          "predicted_field_id": "field-0009",
+          "label": "邀请方地址",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-007",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-008",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        },
+        {
+          "gold_field_id": "gold-expiry",
+          "predicted_field_id": "field-0003",
+          "label": "护照有效期",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-009",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        },
+        {
+          "gold_field_id": "gold-visit1_start",
+          "predicted_field_id": "field-0011",
+          "label": "访问开始日",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-010",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-name",
+          "predicted_field_id": "field-0001",
+          "label": "姓名",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-011",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-012",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-014",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DEV-015",
+      "errors": [],
+      "fields": [
+        {
+          "gold_field_id": "gold-passport",
+          "predicted_field_id": "field-0002",
+          "label": "护照号码",
+          "failed_checks": [
+            "candidates"
+          ]
+        },
+        {
+          "gold_field_id": "gold-address",
+          "predicted_field_id": "field-0009",
+          "label": "邀请方地址",
+          "failed_checks": [
+            "status",
+            "action",
+            "value",
+            "issues",
+            "candidates",
+            "evidence"
+          ]
+        }
+      ]
+    }
+  ],
+  "human_reviewed_tasks": 0,
+  "limitations": [
+    "same generated development corpus",
+    "physical form parsing shared with rule baseline",
+    "no OCR or writeback",
+    "source-grounding cannot prove extraction completeness",
+    "abnormal-field reasoning evidence not fully scored by existing contract"
+  ],
+  "verification": {
+    "tests_passed": 138,
+    "dataset_artifact_audit": "passed",
+    "status_script_sha256": "4c24c931e5a586c8c54674d81765bdec017fc338949ac81f9ddbfba232b1e4b9",
+    "server_after_batch": {
+      "service_pid": 1113117,
+      "api_registration": "READY",
+      "gpu_index": 3,
+      "memory_used_mib": 25312,
+      "utilization_percent": 0
+    }
+  }
+}

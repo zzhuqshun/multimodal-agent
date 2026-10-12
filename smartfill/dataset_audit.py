@@ -245,4 +245,5 @@ def audit_dataset(root: Path) -> dict:
     require(physical == allowed_files, "unindexed or missing dataset files")
     return {"tasks": len(records), "templates": 3, "categories": dict(Counter(r["category"] for r in records)),
             "fields": total_fields, "expected_field_statuses": dict(statuses), "artifact_audit": "passed",
-            "human_reviewed_tasks": 0, "model_runs": 0}
+            "human_reviewed_tasks": 0, "embedded_model_predictions": 0,
+            "audit_scope": "dataset files only; external runs/ predictions are not inspected"}

@@ -91,6 +91,16 @@ def check_model(config: ModelConfig) -> dict:
         "max_tokens": 64, "temperature": 0, "stream": False,
         "chat_template_kwargs": {"enable_thinking": False},
     })
+    content, tokens = completed_chat(response)
+    return {"status": "passed", "model_id": config.model,
+            "response_model": response.get("model"), "text_response": content,
+            "probe_match": content.strip() == "SMARTFILL_OK",
+            "usage": tokens, "elapsed_ms": (perf_counter() - started) * 1000,
+            "scope": "model registration and text connectivity only; no filling or vision evaluation"}
+
+
+def completed_chat(response):
+    """Validate a complete answer and actual optional token counters."""
     choices = response.get("choices")
     if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
         raise ValueError("chat response has an invalid choices structure")
@@ -104,8 +114,4 @@ def check_model(config: ModelConfig) -> dict:
     tokens = {name: (usage or {}).get(name) for name in ("prompt_tokens", "completion_tokens", "total_tokens")}
     if any(v is not None and (type(v) is not int or v < 0) for v in tokens.values()):
         raise ValueError("chat response has invalid token counts")
-    return {"status": "passed", "model_id": config.model,
-            "response_model": response.get("model"), "text_response": message["content"],
-            "probe_match": message["content"].strip() == "SMARTFILL_OK",
-            "usage": tokens, "elapsed_ms": (perf_counter() - started) * 1000,
-            "scope": "model registration and text connectivity only; no filling or vision evaluation"}
+    return message["content"], tokens

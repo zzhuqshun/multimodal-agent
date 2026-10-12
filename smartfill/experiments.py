@@ -31,11 +31,19 @@ def evaluate_saved(task_directory: Path, result_path: Path) -> dict:
 
 
 def run_rule_batch(dataset: Path, output: Path | None = None) -> dict:
+    return _run_batch(dataset, output)
+
+
+def run_model_batch(dataset: Path, config, output: Path | None = None) -> dict:
+    return _run_batch(dataset, output, config)
+
+
+def _run_batch(dataset: Path, output: Path | None, config=None) -> dict:
     dataset = dataset.resolve(strict=True)
     # Discover task input paths without loading manifest, classes, anomaly tags or annotations.
     inputs = sorted((dataset / "tasks").glob("*/input.json"))
     require(bool(inputs), "no task inputs found")
-    run_id = "rule-" + datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y%m%d-%H%M%S") + "-" + uuid4().hex[:8]
+    run_id = ("model-" if config else "rule-") + datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y%m%d-%H%M%S") + "-" + uuid4().hex[:8]
     output = (output or Path("runs") / run_id).absolute()
     require(not output.exists(), "run directory already exists; choose a new output directory")
     require(not output.resolve().is_relative_to(dataset), "run outputs must be outside the dataset")
@@ -45,7 +53,11 @@ def run_rule_batch(dataset: Path, output: Path | None = None) -> dict:
     for number, input_file in enumerate(inputs, 1):
         root = input_file.parent.resolve(strict=True)
         require(root.is_relative_to(dataset), "task directory escapes dataset")
-        result = fill_task(root, run_id)
+        if config:
+            from .model_baseline import fill_model_task
+            result = fill_model_task(root, config, output / f"tasks/task-{number:04d}/model", run_id)
+        else:
+            result = fill_task(root, run_id)
         relative = f"tasks/task-{number:04d}/result.json"
         write_new(output / relative, result.model_dump(mode="json"))
         jobs.append((root, output / relative))
@@ -61,10 +73,19 @@ def run_rule_batch(dataset: Path, output: Path | None = None) -> dict:
         raise
     summary = aggregate(reports)
     summary.update({"run_id": run_id, "dataset": str(dataset), "directory": str(output),
-                    "baseline": "rule-baseline-0.1.0", "model_calls": 0,
+                    "baseline": "qwen-extraction-baseline-0.1.0" if config else "rule-baseline-0.1.0",
+                    "model_calls": len(list(output.glob("tasks/*/model/request.json"))),
                     "task_results": [{"task_id": r["task_id"], "task_pass": r["task_pass"],
                                       "task_status": r["task_status"],
                                       "result_path": f"tasks/task-{i:04d}/result.json"}
                                      for i, r in enumerate(reports, 1)]})
+    if config:
+        from .model_baseline import PROMPT_VERSION
+        summary.update(model_id=config.model, prompt_version=PROMPT_VERSION)
+        usage = [FillingResult.model_validate_json(path.read_bytes()).run_metadata for _, path in jobs]
+        summary["token_usage"] = {
+            key: {"sum_reported": sum(getattr(m, key) or 0 for m in usage),
+                  "reported_tasks": sum(getattr(m, key) is not None for m in usage),
+                  "tasks": len(usage)} for key in ("input_tokens", "output_tokens")}
     write_new(output / "summary.json", summary)
     return summary

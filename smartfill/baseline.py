@@ -1,4 +1,4 @@
-"""Rule baseline: only TaskInput and its declared physical materials are read."""
+"""Grounded source extraction and deterministic filling checks."""
 from __future__ import annotations
 
 import json
@@ -16,43 +16,60 @@ VERSION = "rule-baseline-0.1.0"
 
 
 def extract_sources(parsed):
-    evidence, facts, blocked = [], [], defaultdict(set)
+    assignments = []
     for document in parsed:
-        project = None
+        projects = [m[1] for segment in document["segments"]
+                    if (m := re.search(r"访问项目编号[:：]\s*(\d+)", segment["text"]))]
         for segment in document["segments"]:
-            match = re.search(r"访问项目编号[:：]\s*(\d+)", segment["text"])
-            if match:
-                project = match[1]
-        for segment in document["segments"]:
-            line = segment["text"]
-            match = re.fullmatch(r"([^:：]+)[:：]\s*(.+)", line)
+            match = re.fullmatch(r"([^:：]+)[:：]\s*(.+)", segment["text"])
             if not match or match[1].strip() not in LABELS:
                 continue
-            key, kind = LABELS[match[1].strip()]
+            key, _ = LABELS[match[1].strip()]
             if key.startswith("visit."):
-                require(project is not None, "visit material has no explicit project number")
-                key = "visit." + project + "." + key.split(".")[1]
-            raw = match[2]
-            start = match.start(2)
-            eid = f"evidence-{len(evidence) + 1:04d}"
-            evidence.append({"evidence_id": eid, "document_id": document["document_id"],
-                             "segment_id": segment["segment_id"], "locator": segment["locator"],
-                             "quote": raw, "start": start, "end": start + len(raw), "origin": "parser"})
-            value = raw
-            if kind == "date":
-                value = None
-                for fmt in ("%Y-%m-%d", "%Y/%m/%d"):
-                    try:
-                        value = datetime.strptime(raw, fmt).date().isoformat()
-                        break
-                    except ValueError:
-                        pass
-                if value is None:
-                    blocked[key].add(document["document_id"])
-                    continue
-            facts.append({"fact_id": f"fact-{len(facts) + 1:04d}", "entity_id": "task-person",
-                          "predicate": key, "raw_value": raw, "normalized_value": {"kind": kind, "value": value},
-                          "evidence_ids": [eid]})
+                require(len(set(projects)) == 1, "visit material has no unique explicit project number")
+                key = "visit." + projects[0] + "." + key.split(".")[1]
+            assignments.append([key, document["document_id"], segment["segment_id"], match[2]])
+    return build_sources(parsed, assignments, "parser")
+
+
+def build_sources(parsed, assignments, origin):
+    """Verify every model/rule quote against declared parsed material before creating facts."""
+    evidence, facts, blocked = [], [], defaultdict(set)
+    segments = {(d["document_id"], s["segment_id"]): s for d in parsed for s in d["segments"]}
+    kinds = dict(LABELS.values())
+    seen = set()
+    require(isinstance(assignments, list), "source assignments must be an array")
+    for row in assignments:
+        require(isinstance(row, list) and len(row) == 4 and
+                all(isinstance(x, str) and x for x in row), "source assignment must contain four strings")
+        key, did, sid, raw = row
+        base_key = re.sub(r"^visit\.\d+\.", "visit.", key)
+        require(base_key in kinds, "unknown source predicate")
+        require(tuple(row) not in seen, "duplicate source assignment")
+        seen.add(tuple(row))
+        require((did, sid) in segments, "source segment is absent")
+        segment = segments[did, sid]
+        require(segment["text"].count(raw) == 1, "quote must be a unique exact substring of the source segment")
+        start = segment["text"].index(raw)
+        eid = f"evidence-{len(evidence) + 1:04d}"
+        evidence.append({"evidence_id": eid, "document_id": did, "segment_id": sid,
+                         "locator": segment["locator"], "quote": raw, "start": start,
+                         "end": start + len(raw), "origin": origin})
+        kind, value = kinds[base_key], raw
+        if kind == "date":
+            value = None
+            for fmt in ("%Y-%m-%d", "%Y/%m/%d"):
+                try:
+                    value = datetime.strptime(raw, fmt).date().isoformat()
+                    break
+                except ValueError:
+                    pass
+            if value is None:
+                blocked[key].add(did)
+                continue
+        facts.append({"fact_id": f"fact-{len(facts) + 1:04d}", "entity_id": "task-person",
+                      "predicate": key, "raw_value": raw,
+                      "normalized_value": {"kind": kind, "value": value}, "evidence_ids": [eid]})
     # Bilingual normalization requires one unambiguous, explicit mapping in visible material.
     aliases = defaultdict(list)
     for fact in facts:
@@ -74,8 +91,13 @@ def extract_sources(parsed):
 
 
 def fill_task(directory: Path, run_id: str = "rule-baseline") -> FillingResult:
+    return _fill_task(directory, run_id)
+
+
+def _fill_task(directory: Path, run_id: str, extractor=None, metadata=None) -> FillingResult:
     root = directory.resolve(strict=True)
     task = TaskInput.model_validate_json((root / "input.json").read_bytes())
+    metadata = metadata if metadata is not None else {"implementation_version": VERSION, "mode": "rule_baseline"}
     started = perf_counter()
     timings = {}
     stage = "input"
@@ -86,7 +108,7 @@ def fill_task(directory: Path, run_id: str = "rule-baseline") -> FillingResult:
     def finish(payload):
         payload.update({"task_id": task.task_id, "run_id": run_id, "task_input": task.model_dump(mode="json"),
                         "timing": {"total_ms": elapsed(), "stages_ms": timings},
-                        "run_metadata": {"implementation_version": VERSION, "mode": "rule_baseline"}})
+                        "run_metadata": dict(metadata)})
         return FillingResult.model_validate_json(json.dumps(payload))
 
     try:
@@ -102,7 +124,7 @@ def fill_task(directory: Path, run_id: str = "rule-baseline") -> FillingResult:
         timings["parse"] = (perf_counter() - previous) * 1000
         stage, previous = "extraction", perf_counter()
         require("同一出访人员" in task.description, "single-person scope must be explicitly declared")
-        evidence, facts, blocked = extract_sources(references)
+        evidence, facts, blocked = (extractor(task, form, references) if extractor else extract_sources(references))
         timings["extraction"] = (perf_counter() - previous) * 1000
         stage, previous = "validation", perf_counter()
         declared = {r.rule_id: (r.kind, r.version) for r in task.rules}
@@ -136,7 +158,7 @@ def fill_task(directory: Path, run_id: str = "rule-baseline") -> FillingResult:
                 for fact in source:
                     candidate = {"candidate_id": f"candidate-{len(candidate_list) + 1:04d}",
                                  "field_id": field["field_id"], "fact_ids": [fact["fact_id"]],
-                                 "value": fact["normalized_value"], "evidence_ids": fact["evidence_ids"], "method": "rule"}
+                                 "value": fact["normalized_value"], "evidence_ids": fact["evidence_ids"], "method": "llm" if extractor else "rule"}
                     candidate_list.append(candidate)
                     candidates.append(candidate)
             distinct = {json.dumps(c["value"], sort_keys=True) for c in candidates}
@@ -212,5 +234,5 @@ def fill_task(directory: Path, run_id: str = "rule-baseline") -> FillingResult:
             update={"total_ms": elapsed(), "stages_ms": dict(timings)})})
     except (OSError, ValueError):
         return finish({"form_schema": None, "task_status": "failed",
-                       "errors": [{"stage": stage, "code": "baseline_input_or_profile_error",
+                       "errors": [{"stage": stage, "code": "model_baseline_error" if extractor else "baseline_input_or_profile_error",
                                    "message": "unsupported or invalid material/profile; no filling suggestions emitted"}]})

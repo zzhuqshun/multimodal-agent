@@ -36,7 +36,9 @@ def test_full_corpus_and_blank_template_audit(corpus):
     assert summary["tasks"] == 15
     assert summary["categories"] == {"normal": 6, "conflict": 5, "missing": 4}
     assert summary["fields"] == 175
-    assert summary["human_reviewed_tasks"] == summary["model_runs"] == 0
+    assert summary["human_reviewed_tasks"] == summary["embedded_model_predictions"] == 0
+    assert "model_runs" not in summary
+    assert "not inspected" in summary["audit_scope"]
     manifest = read(corpus / "manifest.json")
     for record in manifest["tasks"]:
         task = read(corpus / record["task_path"] / "input.json")

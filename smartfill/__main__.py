@@ -57,6 +57,13 @@ def main() -> int:
     run = subcommands.add_parser("run-rule-baseline", help="save all predictions, then independently evaluate")
     run.add_argument("directory", type=Path)
     run.add_argument("--output", type=Path)
+    model_fill = subcommands.add_parser("fill-model", help="extract with Qwen and validate grounded draft")
+    model_fill.add_argument("directory", type=Path)
+    model_fill.add_argument("--output", required=True, type=Path)
+    model_fill.add_argument("--trace", required=True, type=Path)
+    model_run = subcommands.add_parser("run-model-baseline", help="save Qwen predictions and raw responses before evaluation")
+    model_run.add_argument("directory", type=Path)
+    model_run.add_argument("--output", type=Path)
     evaluate = subcommands.add_parser("evaluate", help="evaluate a saved prediction against independent gold")
     evaluate.add_argument("directory", type=Path)
     evaluate.add_argument("result", type=Path)
@@ -66,6 +73,23 @@ def main() -> int:
         if args.command == "check-model":
             from .model_api import ModelConfig, check_model
             print(json.dumps(check_model(ModelConfig.from_env()), ensure_ascii=False, indent=2))
+        elif args.command == "run-model-baseline":
+            from .model_api import ModelConfig
+            from .experiments import run_model_batch
+            print(json.dumps(run_model_batch(args.directory, ModelConfig.from_env(), args.output),
+                             ensure_ascii=False, indent=2))
+        elif args.command == "fill-model":
+            from .model_api import ModelConfig
+            from .model_baseline import fill_model_task
+            from .experiments import write_new
+            require(not args.output.exists(), "output already exists")
+            require(not args.output.resolve().is_relative_to(args.directory.resolve()),
+                    "prediction output must be outside the task directory")
+            result = fill_model_task(args.directory, ModelConfig.from_env(), args.trace)
+            write_new(args.output, result.model_dump(mode="json"))
+            print(json.dumps({"task_id": result.task_id, "task_status": result.task_status,
+                              "output": str(args.output.absolute())}, ensure_ascii=False, indent=2))
+            return 1 if result.task_status == "failed" else 0
         elif args.command == "validate":
             print(json.dumps(validate_example(args.directory), ensure_ascii=True, indent=2))
         elif args.command == "generate-dev":
