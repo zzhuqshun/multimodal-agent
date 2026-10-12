@@ -1,0 +1,1219 @@
+{
+  "date": "2026-10-12",
+  "scope": "same generated development tasks; no OCR, training or independent holdout",
+  "first_model_run": {
+    "tasks": 15,
+    "counts": {
+      "gold_fields": 175,
+      "predicted_fields": 166,
+      "fillable_gold": 163,
+      "refusal_gold": 12,
+      "gold_conflicts": 5,
+      "predicted_conflicts": 1,
+      "predicted_nonempty": 152,
+      "gold_candidates": 190,
+      "predicted_candidates": 150,
+      "evidence_gold": 163,
+      "calculation_gold": 13,
+      "identified": 166,
+      "matched_candidates": 150,
+      "aligned_fillable": 154,
+      "aligned_correct_values": 148,
+      "correct_evidence": 148,
+      "correct_states_actions": 156,
+      "conflict_tp": 1,
+      "fully_correct_fields": 146,
+      "correct_calculations": 11,
+      "wrong_fills": 4,
+      "correct_refusals": 8
+    },
+    "metrics": {
+      "field_precision": {
+        "numerator": 166,
+        "denominator": 166,
+        "value": 1.0
+      },
+      "field_recall": {
+        "numerator": 166,
+        "denominator": 175,
+        "value": 0.9485714285714286
+      },
+      "field_f1": {
+        "numerator": 332,
+        "denominator": 341,
+        "value": 0.9736070381231672
+      },
+      "aligned_value_accuracy": {
+        "numerator": 148,
+        "denominator": 154,
+        "value": 0.961038961038961
+      },
+      "end_to_end_value_recall": {
+        "numerator": 148,
+        "denominator": 163,
+        "value": 0.9079754601226994
+      },
+      "state_action_accuracy": {
+        "numerator": 156,
+        "denominator": 175,
+        "value": 0.8914285714285715
+      },
+      "wrong_fill_rate": {
+        "numerator": 4,
+        "denominator": 152,
+        "value": 0.02631578947368421
+      },
+      "conflict_precision": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "conflict_recall": {
+        "numerator": 1,
+        "denominator": 5,
+        "value": 0.2
+      },
+      "correct_refusal_rate": {
+        "numerator": 8,
+        "denominator": 12,
+        "value": 0.6666666666666666
+      },
+      "filled_field_evidence_accuracy": {
+        "numerator": 148,
+        "denominator": 163,
+        "value": 0.9079754601226994
+      },
+      "source_candidate_precision": {
+        "numerator": 150,
+        "denominator": 150,
+        "value": 1.0
+      },
+      "source_candidate_recall": {
+        "numerator": 150,
+        "denominator": 190,
+        "value": 0.7894736842105263
+      },
+      "calculation_chain_accuracy": {
+        "numerator": 11,
+        "denominator": 13,
+        "value": 0.8461538461538461
+      },
+      "full_field_pass_rate": {
+        "numerator": 146,
+        "denominator": 175,
+        "value": 0.8342857142857143
+      },
+      "task_pass_rate": {
+        "numerator": 2,
+        "denominator": 15,
+        "value": 0.13333333333333333
+      }
+    },
+    "task_statuses": {
+      "completed": 7,
+      "needs_review": 7,
+      "failed": 1
+    },
+    "pending_requests": 14,
+    "timing_ms": {
+      "sum": 151240.27428499903,
+      "median": 9372.664195000652,
+      "p95": 15492.39145699994
+    },
+    "failure_stages": {
+      "extraction": 1
+    },
+    "evaluation_scope": "controlled development tasks; evidence metric covers filled fields only; no generalization claim",
+    "run_id": "model-20261012-141818-70fd7518",
+    "dataset": "/home/user773/multimodal_agent/data/dev/v0.1.0",
+    "directory": "/home/user773/multimodal_agent/runs/qwen-dev-v1-20261012",
+    "baseline": "qwen-extraction-baseline-0.1.0",
+    "model_calls": 15,
+    "task_results": [
+      {
+        "task_id": "DEV-001",
+        "task_pass": true,
+        "task_status": "completed",
+        "result_path": "tasks/task-0001/result.json"
+      },
+      {
+        "task_id": "DEV-002",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0002/result.json"
+      },
+      {
+        "task_id": "DEV-003",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0003/result.json"
+      },
+      {
+        "task_id": "DEV-004",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0004/result.json"
+      },
+      {
+        "task_id": "DEV-005",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0005/result.json"
+      },
+      {
+        "task_id": "DEV-006",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0006/result.json"
+      },
+      {
+        "task_id": "DEV-007",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0007/result.json"
+      },
+      {
+        "task_id": "DEV-008",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0008/result.json"
+      },
+      {
+        "task_id": "DEV-009",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0009/result.json"
+      },
+      {
+        "task_id": "DEV-010",
+        "task_pass": false,
+        "task_status": "completed",
+        "result_path": "tasks/task-0010/result.json"
+      },
+      {
+        "task_id": "DEV-011",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0011/result.json"
+      },
+      {
+        "task_id": "DEV-012",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0012/result.json"
+      },
+      {
+        "task_id": "DEV-013",
+        "task_pass": true,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0013/result.json"
+      },
+      {
+        "task_id": "DEV-014",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0014/result.json"
+      },
+      {
+        "task_id": "DEV-015",
+        "task_pass": false,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0015/result.json"
+      }
+    ],
+    "model_id": "smartfill-qwen3.5-9b",
+    "prompt_version": "grounded-source-rows-1",
+    "token_usage": {
+      "input_tokens": {
+        "sum_reported": 15971,
+        "reported_tasks": 15,
+        "tasks": 15
+      },
+      "output_tokens": {
+        "sum_reported": 4907,
+        "reported_tasks": 15,
+        "tasks": 15
+      }
+    }
+  },
+  "strict_document_run": {
+    "tasks": 15,
+    "counts": {
+      "gold_fields": 175,
+      "predicted_fields": 0,
+      "fillable_gold": 163,
+      "refusal_gold": 12,
+      "gold_conflicts": 5,
+      "predicted_conflicts": 0,
+      "predicted_nonempty": 0,
+      "gold_candidates": 190,
+      "predicted_candidates": 0,
+      "evidence_gold": 163,
+      "calculation_gold": 13,
+      "identified": 0,
+      "fully_correct_fields": 0,
+      "wrong_fills": 0
+    },
+    "metrics": {
+      "field_precision": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "field_recall": {
+        "numerator": 0,
+        "denominator": 175,
+        "value": 0.0
+      },
+      "field_f1": {
+        "numerator": 0,
+        "denominator": 175,
+        "value": 0.0
+      },
+      "aligned_value_accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "end_to_end_value_recall": {
+        "numerator": 0,
+        "denominator": 163,
+        "value": 0.0
+      },
+      "state_action_accuracy": {
+        "numerator": 0,
+        "denominator": 175,
+        "value": 0.0
+      },
+      "wrong_fill_rate": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "conflict_precision": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "conflict_recall": {
+        "numerator": 0,
+        "denominator": 5,
+        "value": 0.0
+      },
+      "correct_refusal_rate": {
+        "numerator": 0,
+        "denominator": 12,
+        "value": 0.0
+      },
+      "filled_field_evidence_accuracy": {
+        "numerator": 0,
+        "denominator": 163,
+        "value": 0.0
+      },
+      "source_candidate_precision": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "source_candidate_recall": {
+        "numerator": 0,
+        "denominator": 190,
+        "value": 0.0
+      },
+      "calculation_chain_accuracy": {
+        "numerator": 0,
+        "denominator": 13,
+        "value": 0.0
+      },
+      "full_field_pass_rate": {
+        "numerator": 0,
+        "denominator": 175,
+        "value": 0.0
+      },
+      "task_pass_rate": {
+        "numerator": 0,
+        "denominator": 15,
+        "value": 0.0
+      }
+    },
+    "task_statuses": {
+      "failed": 15
+    },
+    "pending_requests": 0,
+    "timing_ms": {
+      "sum": 134924.4137009973,
+      "median": 9537.656006999896,
+      "p95": 18011.783174999437
+    },
+    "failure_stages": {
+      "extraction": 15
+    },
+    "evaluation_scope": "controlled development tasks; evidence metric covers filled fields only; no generalization claim",
+    "run_id": "model-20261012-144513-d1ab5ec6",
+    "dataset": "/home/user773/multimodal_agent/data/dev/v0.1.0",
+    "directory": "/home/user773/multimodal_agent/runs/qwen-document-dev-v5-20261012",
+    "baseline": "qwen-document-baseline-0.2.0",
+    "model_calls": 27,
+    "task_results": [
+      {
+        "task_id": "DEV-001",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0001/result.json"
+      },
+      {
+        "task_id": "DEV-002",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0002/result.json"
+      },
+      {
+        "task_id": "DEV-003",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0003/result.json"
+      },
+      {
+        "task_id": "DEV-004",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0004/result.json"
+      },
+      {
+        "task_id": "DEV-005",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0005/result.json"
+      },
+      {
+        "task_id": "DEV-006",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0006/result.json"
+      },
+      {
+        "task_id": "DEV-007",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0007/result.json"
+      },
+      {
+        "task_id": "DEV-008",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0008/result.json"
+      },
+      {
+        "task_id": "DEV-009",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0009/result.json"
+      },
+      {
+        "task_id": "DEV-010",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0010/result.json"
+      },
+      {
+        "task_id": "DEV-011",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0011/result.json"
+      },
+      {
+        "task_id": "DEV-012",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0012/result.json"
+      },
+      {
+        "task_id": "DEV-013",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0013/result.json"
+      },
+      {
+        "task_id": "DEV-014",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0014/result.json"
+      },
+      {
+        "task_id": "DEV-015",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0015/result.json"
+      }
+    ],
+    "model_id": "smartfill-qwen3.5-9b",
+    "strategy": "document",
+    "prompt_version": "grounded-document-objects-5",
+    "token_usage": {
+      "input_tokens": {
+        "sum_reported": 18741,
+        "reported_tasks": 15,
+        "tasks": 15
+      },
+      "output_tokens": {
+        "sum_reported": 4303,
+        "reported_tasks": 15,
+        "tasks": 15
+      }
+    },
+    "request_token_usage": {
+      "prompt_tokens": {
+        "sum_reported": 18741,
+        "reported_responses": 27,
+        "saved_responses": 27,
+        "request_attempts": 27
+      },
+      "completion_tokens": {
+        "sum_reported": 4303,
+        "reported_responses": 27,
+        "saved_responses": 27,
+        "request_attempts": 27
+      }
+    }
+  },
+  "repair_document_run": {
+    "tasks": 15,
+    "counts": {
+      "gold_fields": 175,
+      "predicted_fields": 44,
+      "fillable_gold": 163,
+      "refusal_gold": 12,
+      "gold_conflicts": 5,
+      "predicted_conflicts": 1,
+      "predicted_nonempty": 39,
+      "gold_candidates": 190,
+      "predicted_candidates": 45,
+      "evidence_gold": 163,
+      "calculation_gold": 13,
+      "identified": 44,
+      "matched_candidates": 45,
+      "aligned_fillable": 39,
+      "aligned_correct_values": 39,
+      "correct_evidence": 39,
+      "correct_states_actions": 44,
+      "conflict_tp": 1,
+      "fully_correct_fields": 44,
+      "correct_calculations": 3,
+      "wrong_fills": 0,
+      "correct_refusals": 5
+    },
+    "metrics": {
+      "field_precision": {
+        "numerator": 44,
+        "denominator": 44,
+        "value": 1.0
+      },
+      "field_recall": {
+        "numerator": 44,
+        "denominator": 175,
+        "value": 0.25142857142857145
+      },
+      "field_f1": {
+        "numerator": 88,
+        "denominator": 219,
+        "value": 0.4018264840182648
+      },
+      "aligned_value_accuracy": {
+        "numerator": 39,
+        "denominator": 39,
+        "value": 1.0
+      },
+      "end_to_end_value_recall": {
+        "numerator": 39,
+        "denominator": 163,
+        "value": 0.2392638036809816
+      },
+      "state_action_accuracy": {
+        "numerator": 44,
+        "denominator": 175,
+        "value": 0.25142857142857145
+      },
+      "wrong_fill_rate": {
+        "numerator": 0,
+        "denominator": 39,
+        "value": 0.0
+      },
+      "conflict_precision": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "conflict_recall": {
+        "numerator": 1,
+        "denominator": 5,
+        "value": 0.2
+      },
+      "correct_refusal_rate": {
+        "numerator": 5,
+        "denominator": 12,
+        "value": 0.4166666666666667
+      },
+      "filled_field_evidence_accuracy": {
+        "numerator": 39,
+        "denominator": 163,
+        "value": 0.2392638036809816
+      },
+      "source_candidate_precision": {
+        "numerator": 45,
+        "denominator": 45,
+        "value": 1.0
+      },
+      "source_candidate_recall": {
+        "numerator": 45,
+        "denominator": 190,
+        "value": 0.23684210526315788
+      },
+      "calculation_chain_accuracy": {
+        "numerator": 3,
+        "denominator": 13,
+        "value": 0.23076923076923078
+      },
+      "full_field_pass_rate": {
+        "numerator": 44,
+        "denominator": 175,
+        "value": 0.25142857142857145
+      },
+      "task_pass_rate": {
+        "numerator": 4,
+        "denominator": 15,
+        "value": 0.26666666666666666
+      }
+    },
+    "task_statuses": {
+      "completed": 1,
+      "failed": 11,
+      "needs_review": 3
+    },
+    "pending_requests": 5,
+    "timing_ms": {
+      "sum": 260928.24832100086,
+      "median": 16068.728554999325,
+      "p95": 24516.76390400098
+    },
+    "failure_stages": {
+      "extraction": 11
+    },
+    "evaluation_scope": "controlled development tasks; evidence metric covers filled fields only; no generalization claim",
+    "run_id": "model-20261012-145040-8e392e95",
+    "dataset": "/home/user773/multimodal_agent/data/dev/v0.1.0",
+    "directory": "/home/user773/multimodal_agent/runs/qwen-document-dev-v6-20261012",
+    "baseline": "qwen-document-baseline-0.3.0",
+    "model_calls": 60,
+    "task_results": [
+      {
+        "task_id": "DEV-001",
+        "task_pass": true,
+        "task_status": "completed",
+        "result_path": "tasks/task-0001/result.json"
+      },
+      {
+        "task_id": "DEV-002",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0002/result.json"
+      },
+      {
+        "task_id": "DEV-003",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0003/result.json"
+      },
+      {
+        "task_id": "DEV-004",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0004/result.json"
+      },
+      {
+        "task_id": "DEV-005",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0005/result.json"
+      },
+      {
+        "task_id": "DEV-006",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0006/result.json"
+      },
+      {
+        "task_id": "DEV-007",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0007/result.json"
+      },
+      {
+        "task_id": "DEV-008",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0008/result.json"
+      },
+      {
+        "task_id": "DEV-009",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0009/result.json"
+      },
+      {
+        "task_id": "DEV-010",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0010/result.json"
+      },
+      {
+        "task_id": "DEV-011",
+        "task_pass": true,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0011/result.json"
+      },
+      {
+        "task_id": "DEV-012",
+        "task_pass": true,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0012/result.json"
+      },
+      {
+        "task_id": "DEV-013",
+        "task_pass": true,
+        "task_status": "needs_review",
+        "result_path": "tasks/task-0013/result.json"
+      },
+      {
+        "task_id": "DEV-014",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0014/result.json"
+      },
+      {
+        "task_id": "DEV-015",
+        "task_pass": false,
+        "task_status": "failed",
+        "result_path": "tasks/task-0015/result.json"
+      }
+    ],
+    "model_id": "smartfill-qwen3.5-9b",
+    "strategy": "document",
+    "prompt_version": "grounded-document-repair-6",
+    "validation_repairs": 18,
+    "token_usage": {
+      "input_tokens": {
+        "sum_reported": 44494,
+        "reported_tasks": 15,
+        "tasks": 15
+      },
+      "output_tokens": {
+        "sum_reported": 8285,
+        "reported_tasks": 15,
+        "tasks": 15
+      }
+    },
+    "request_token_usage": {
+      "prompt_tokens": {
+        "sum_reported": 44494,
+        "reported_responses": 60,
+        "saved_responses": 60,
+        "request_attempts": 60
+      },
+      "completion_tokens": {
+        "sum_reported": 8285,
+        "reported_responses": 60,
+        "saved_responses": 60,
+        "request_attempts": 60
+      }
+    }
+  },
+  "pilot_runs": [
+    {
+      "directory": "runs/qwen-document-pilot-1",
+      "task_status": "failed",
+      "prompt_version": "grounded-document-rows-2",
+      "model_calls": 1
+    },
+    {
+      "directory": "runs/qwen-document-pilot-2",
+      "task_status": "failed",
+      "prompt_version": "grounded-document-rows-3",
+      "model_calls": 1
+    },
+    {
+      "directory": "runs/qwen-document-pilot-3",
+      "task_status": "failed",
+      "prompt_version": "grounded-document-objects-4",
+      "model_calls": 2
+    }
+  ],
+  "calls_this_stage": {
+    "pilots": 4,
+    "strict": 27,
+    "repair": 60,
+    "total": 91
+  },
+  "comparison": {
+    "field_precision": {
+      "rule": {
+        "numerator": 175,
+        "denominator": 175,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 166,
+        "denominator": 166,
+        "value": 1.0
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "repair_document": {
+        "numerator": 44,
+        "denominator": 44,
+        "value": 1.0
+      }
+    },
+    "field_recall": {
+      "rule": {
+        "numerator": 175,
+        "denominator": 175,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 166,
+        "denominator": 175,
+        "value": 0.9485714285714286
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 175,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 44,
+        "denominator": 175,
+        "value": 0.25142857142857145
+      }
+    },
+    "field_f1": {
+      "rule": {
+        "numerator": 350,
+        "denominator": 350,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 332,
+        "denominator": 341,
+        "value": 0.9736070381231672
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 175,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 88,
+        "denominator": 219,
+        "value": 0.4018264840182648
+      }
+    },
+    "aligned_value_accuracy": {
+      "rule": {
+        "numerator": 163,
+        "denominator": 163,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 148,
+        "denominator": 154,
+        "value": 0.961038961038961
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "repair_document": {
+        "numerator": 39,
+        "denominator": 39,
+        "value": 1.0
+      }
+    },
+    "end_to_end_value_recall": {
+      "rule": {
+        "numerator": 163,
+        "denominator": 163,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 148,
+        "denominator": 163,
+        "value": 0.9079754601226994
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 163,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 39,
+        "denominator": 163,
+        "value": 0.2392638036809816
+      }
+    },
+    "state_action_accuracy": {
+      "rule": {
+        "numerator": 175,
+        "denominator": 175,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 156,
+        "denominator": 175,
+        "value": 0.8914285714285715
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 175,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 44,
+        "denominator": 175,
+        "value": 0.25142857142857145
+      }
+    },
+    "wrong_fill_rate": {
+      "rule": {
+        "numerator": 0,
+        "denominator": 163,
+        "value": 0.0
+      },
+      "first_model": {
+        "numerator": 4,
+        "denominator": 152,
+        "value": 0.02631578947368421
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "repair_document": {
+        "numerator": 0,
+        "denominator": 39,
+        "value": 0.0
+      }
+    },
+    "conflict_precision": {
+      "rule": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "repair_document": {
+        "numerator": 1,
+        "denominator": 1,
+        "value": 1.0
+      }
+    },
+    "conflict_recall": {
+      "rule": {
+        "numerator": 5,
+        "denominator": 5,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 1,
+        "denominator": 5,
+        "value": 0.2
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 5,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 1,
+        "denominator": 5,
+        "value": 0.2
+      }
+    },
+    "correct_refusal_rate": {
+      "rule": {
+        "numerator": 12,
+        "denominator": 12,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 8,
+        "denominator": 12,
+        "value": 0.6666666666666666
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 12,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 5,
+        "denominator": 12,
+        "value": 0.4166666666666667
+      }
+    },
+    "filled_field_evidence_accuracy": {
+      "rule": {
+        "numerator": 163,
+        "denominator": 163,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 148,
+        "denominator": 163,
+        "value": 0.9079754601226994
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 163,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 39,
+        "denominator": 163,
+        "value": 0.2392638036809816
+      }
+    },
+    "source_candidate_precision": {
+      "rule": {
+        "numerator": 190,
+        "denominator": 190,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 150,
+        "denominator": 150,
+        "value": 1.0
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 0,
+        "value": null
+      },
+      "repair_document": {
+        "numerator": 45,
+        "denominator": 45,
+        "value": 1.0
+      }
+    },
+    "source_candidate_recall": {
+      "rule": {
+        "numerator": 190,
+        "denominator": 190,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 150,
+        "denominator": 190,
+        "value": 0.7894736842105263
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 190,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 45,
+        "denominator": 190,
+        "value": 0.23684210526315788
+      }
+    },
+    "calculation_chain_accuracy": {
+      "rule": {
+        "numerator": 13,
+        "denominator": 13,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 11,
+        "denominator": 13,
+        "value": 0.8461538461538461
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 13,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 3,
+        "denominator": 13,
+        "value": 0.23076923076923078
+      }
+    },
+    "full_field_pass_rate": {
+      "rule": {
+        "numerator": 175,
+        "denominator": 175,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 146,
+        "denominator": 175,
+        "value": 0.8342857142857143
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 175,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 44,
+        "denominator": 175,
+        "value": 0.25142857142857145
+      }
+    },
+    "task_pass_rate": {
+      "rule": {
+        "numerator": 15,
+        "denominator": 15,
+        "value": 1.0
+      },
+      "first_model": {
+        "numerator": 2,
+        "denominator": 15,
+        "value": 0.13333333333333333
+      },
+      "strict_document": {
+        "numerator": 0,
+        "denominator": 15,
+        "value": 0.0
+      },
+      "repair_document": {
+        "numerator": 4,
+        "denominator": 15,
+        "value": 0.26666666666666666
+      }
+    }
+  },
+  "system_prompt_sha256": "93a338ce5e4937294ae1efd9951cd666b84919031164c88046dddbee6c67285f",
+  "request_settings": {
+    "temperature": 0,
+    "max_tokens": 4096,
+    "enable_thinking": false,
+    "response_format": "json_schema",
+    "max_validation_repairs_per_document": 1,
+    "transport_retries": 0,
+    "rule_fallback": false
+  },
+  "failure_details": [
+    {
+      "task_id": "DEV-002",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 3
+      },
+      "failed_field_checks": 9
+    },
+    {
+      "task_id": "DEV-003",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 2
+      },
+      "failed_field_checks": 17
+    },
+    {
+      "task_id": "DEV-004",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "grounding": 2
+      },
+      "failed_field_checks": 9
+    },
+    {
+      "task_id": "DEV-005",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 2
+      },
+      "failed_field_checks": 9
+    },
+    {
+      "task_id": "DEV-006",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 2
+      },
+      "failed_field_checks": 17
+    },
+    {
+      "task_id": "DEV-007",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 2
+      },
+      "failed_field_checks": 9
+    },
+    {
+      "task_id": "DEV-008",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 2
+      },
+      "failed_field_checks": 9
+    },
+    {
+      "task_id": "DEV-009",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 2
+      },
+      "failed_field_checks": 17
+    },
+    {
+      "task_id": "DEV-010",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 3
+      },
+      "failed_field_checks": 9
+    },
+    {
+      "task_id": "DEV-014",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 2
+      },
+      "failed_field_checks": 9
+    },
+    {
+      "task_id": "DEV-015",
+      "task_status": "failed",
+      "attempt_error_steps": {
+        "coverage": 2
+      },
+      "failed_field_checks": 17
+    }
+  ],
+  "human_reviewed_tasks": 0,
+  "tests_passed": 159,
+  "limits": [
+    "known-label coverage and mapping guards are domain rules",
+    "exact quotes do not prove all semantic associations",
+    "whole task is rejected when any document cannot pass validation",
+    "versions iterated on development data",
+    "no model fine tuning"
+  ]
+}

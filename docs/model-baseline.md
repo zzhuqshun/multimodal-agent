@@ -8,6 +8,8 @@
 
 每题仅一次模型请求，无自动重试、修补模型回答或规则回退。模型输出必须为sources四字符串行数组；未知键、重复行、非原文引用、截断回答、模型ID不匹配或非法响应会拒绝该题，输出failed且不产生填写建议。语义错误和遗漏未必违反引用约束，仍需要独立评测发现。verified只表示对已提取事实的检查通过，不能证明全部材料已被读取。
 
+本说明保留首轮单请求策略的历史结果。当前CLI默认使用逐文档及一次纠错，详见[逐文档说明](model-document-baseline.md)。
+
 ## 运行方式
 
 在WSL中确认SSH转发可用，并确认本地.env内容后：
@@ -17,13 +19,13 @@ cd /home/user773/multimodal_agent
 set -a
 source .env
 set +a
-.venv/bin/python -m smartfill run-model-baseline data/dev/v0.1.0
+.venv/bin/python -m smartfill run-model-baseline data/dev/v0.1.0 --strategy all
 ~~~
 
 单题命令：
 
 ~~~bash
-.venv/bin/python -m smartfill fill-model data/dev/v0.1.0/tasks/DEV-001 --output runs/my-model-task/result.json --trace runs/my-model-task/model
+.venv/bin/python -m smartfill fill-model data/dev/v0.1.0/tasks/DEV-001 --output runs/my-model-task/result.json --trace runs/my-model-task/model --strategy all
 .venv/bin/python -m smartfill evaluate data/dev/v0.1.0/tasks/DEV-001 runs/my-model-task/result.json
 ~~~
 

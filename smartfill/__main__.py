@@ -61,9 +61,13 @@ def main() -> int:
     model_fill.add_argument("directory", type=Path)
     model_fill.add_argument("--output", required=True, type=Path)
     model_fill.add_argument("--trace", required=True, type=Path)
+    model_fill.add_argument("--strategy", choices=("document", "all"), default="document")
+    model_fill.add_argument("--repair-attempts", type=int, choices=(0, 1), default=1)
     model_run = subcommands.add_parser("run-model-baseline", help="save Qwen predictions and raw responses before evaluation")
     model_run.add_argument("directory", type=Path)
     model_run.add_argument("--output", type=Path)
+    model_run.add_argument("--strategy", choices=("document", "all"), default="document")
+    model_run.add_argument("--repair-attempts", type=int, choices=(0, 1), default=1)
     evaluate = subcommands.add_parser("evaluate", help="evaluate a saved prediction against independent gold")
     evaluate.add_argument("directory", type=Path)
     evaluate.add_argument("result", type=Path)
@@ -76,7 +80,7 @@ def main() -> int:
         elif args.command == "run-model-baseline":
             from .model_api import ModelConfig
             from .experiments import run_model_batch
-            print(json.dumps(run_model_batch(args.directory, ModelConfig.from_env(), args.output),
+            print(json.dumps(run_model_batch(args.directory, ModelConfig.from_env(), args.output, args.strategy, args.repair_attempts),
                              ensure_ascii=False, indent=2))
         elif args.command == "fill-model":
             from .model_api import ModelConfig
@@ -85,7 +89,7 @@ def main() -> int:
             require(not args.output.exists(), "output already exists")
             require(not args.output.resolve().is_relative_to(args.directory.resolve()),
                     "prediction output must be outside the task directory")
-            result = fill_model_task(args.directory, ModelConfig.from_env(), args.trace)
+            result = fill_model_task(args.directory, ModelConfig.from_env(), args.trace, strategy=args.strategy, repair_attempts=args.repair_attempts)
             write_new(args.output, result.model_dump(mode="json"))
             print(json.dumps({"task_id": result.task_id, "task_status": result.task_status,
                               "output": str(args.output.absolute())}, ensure_ascii=False, indent=2))
