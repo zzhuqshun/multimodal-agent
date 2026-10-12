@@ -1,4 +1,4 @@
-"""CLI for contract validation and schema export; this is not a filling pipeline."""
+"""CLI for contracts, physical-file rule filling and independent development evaluation."""
 
 import argparse
 import json
@@ -51,6 +51,15 @@ def main() -> int:
     generate.add_argument("--font", type=Path, default=Path("/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf"))
     audit = subcommands.add_parser("audit-dataset", help="read back and audit physical files and independent gold")
     audit.add_argument("directory", type=Path)
+    fill = subcommands.add_parser("fill-rule", help="fill one task using only declared physical materials")
+    fill.add_argument("directory", type=Path)
+    fill.add_argument("--output", required=True, type=Path)
+    run = subcommands.add_parser("run-rule-baseline", help="save all predictions, then independently evaluate")
+    run.add_argument("directory", type=Path)
+    run.add_argument("--output", type=Path)
+    evaluate = subcommands.add_parser("evaluate", help="evaluate a saved prediction against independent gold")
+    evaluate.add_argument("directory", type=Path)
+    evaluate.add_argument("result", type=Path)
     args = parser.parse_args()
     try:
         if args.command == "validate":
@@ -61,6 +70,23 @@ def main() -> int:
         elif args.command == "audit-dataset":
             from .dataset_audit import audit_dataset
             print(json.dumps(audit_dataset(args.directory), ensure_ascii=False, indent=2))
+        elif args.command == "fill-rule":
+            from .baseline import fill_task
+            from .experiments import write_new
+            require(not args.output.exists(), "output already exists")
+            require(not args.output.resolve().is_relative_to(args.directory.resolve()),
+                    "prediction output must be outside the task directory")
+            result = fill_task(args.directory)
+            write_new(args.output, result.model_dump(mode="json"))
+            print(json.dumps({"task_id": result.task_id, "task_status": result.task_status,
+                              "output": str(args.output.absolute())}, ensure_ascii=False, indent=2))
+            return 1 if result.task_status == "failed" else 0
+        elif args.command == "run-rule-baseline":
+            from .experiments import run_rule_batch
+            print(json.dumps(run_rule_batch(args.directory, args.output), ensure_ascii=False, indent=2))
+        elif args.command == "evaluate":
+            from .experiments import evaluate_saved
+            print(json.dumps(evaluate_saved(args.directory, args.result), ensure_ascii=False, indent=2))
         else:
             export_schemas(args.directory)
             print("Exported TaskInput, FillingResult and GroundTruth schemas.")

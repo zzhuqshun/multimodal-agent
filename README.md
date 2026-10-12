@@ -1,8 +1,8 @@
 # 多模态智能填报框架
 
-当前阶段：0.1.0 数据契约与15组模拟开发任务。开发环境为 WSL Ubuntu，工作目录为 /home/user773/multimodal_agent。
+当前阶段：0.1.0 数据契约、15组模拟开发任务、实际文件规则基线与独立评测。开发环境为 WSL Ubuntu，工作目录为 /home/user773/multimodal_agent。
 
-已实现统一Pydantic模型、跨对象一致性检查、两个手工样例、JSON Schema导出，以及3模板/15组模拟任务生成与独立审计。CLI验证的是已经构造好的结果，不会自动理解表单，也不会调用OCR或模型。
+已实现统一Pydantic模型、跨对象一致性检查、两个手工样例、JSON Schema导出、3模板/15组模拟任务生成与审计，以及从实际PDF/Excel空白表和UTF-8参考材料生成可信JSON草稿的规则基线。预测先独立保存，再加载答案评测；尚未调用OCR或模型。
 
 ## 运行
 
@@ -16,6 +16,8 @@ python3 -m venv .venv
 .venv/bin/python -m smartfill validate data/examples/normal
 .venv/bin/python -m smartfill validate data/examples/conflict
 .venv/bin/python -m smartfill export-schemas schemas
+# 数据已生成时直接运行；没有数据时先运行generate-dev
+.venv/bin/python -m smartfill run-rule-baseline data/dev/v0.1.0
 ```
 
 Python要求3.12及以上；当前已验证Ubuntu上的Python 3.12.3。requirements-dev.lock记录本轮实际安装版本；pyproject.toml定义运行依赖与开发依赖范围。当前从源码根目录运行，尚未发布可安装SDK包。
@@ -24,7 +26,7 @@ Python要求3.12及以上；当前已验证Ubuntu上的Python 3.12.3。requireme
 
 ```text
 multimodal_agent/
-  smartfill/                 # 数据模型、校验、数据生成/审计、CLI
+  smartfill/                 # 契约、实际文件解析、规则填报、评测与CLI
   tests/                     # 契约与异常场景测试
   schemas/                   # 三类顶层接口的JSON Schema
   data/
@@ -34,7 +36,8 @@ multimodal_agent/
     validation/              # 验证数据
     holdout/                 # 隔离的最终评测数据
     external/                # 公开数据原始下载
-  docs/                      # 总体方案正文、接口说明、部署计划
+  runs/                      # 每次预测及独立评测，默认不提交Git
+  docs/                      # 方案、接口、基线报告、部署计划
   .env.example               # 后续远端模型接口配置示例
   requirements-dev.lock
   WORKLOG.md
@@ -60,13 +63,15 @@ conflict样例的护照材料记载P00001234，邀请函记载P00005678；输出
 
 JSON Schema可校验结构和基础类型，跨对象引用及状态约束由Python校验器执行。引用匹配不能证明语义理解或OCR识别正确，也不能保证归一化、实体关联或规则执行正确；这些由后续基线、业务校验和评测验证。
 
-PDF/图片、Excel及Word已有定位对象；通用结果的原文证据核验当前只支持UTF-8纯文本；开发数据审计额外回读自建PDF/Excel的空白字段区域。尚未接入这些格式的解析器，也没有自动填报或模型基线准确率结论。
+物理核验现支持UTF-8文本、PDF文本区域和Excel单元格。规则解析支持明确矩形边框的文本PDF及单工作表、标签邻接空白合并单元格的Excel；不支持OCR、扫描/旋转PDF、Word、复杂表格和多人员消歧。未知标签进入复核。
+
+正式开发集运行15/15题通过，175字段中163字段填写、12字段按预期拒填，190来源候选和13条计算链通过；100项测试通过。此数据参与开发，不能作为真实业务或未知模板泛化成绩。运行方法、指标分母和异常证据评分限制见[规则基线说明](docs/rule-baseline.md)，真实摘要见[运行报告](docs/rule-baseline-report.json)。
 
 ## 服务器与后续步骤
 
 本地WSL负责框架、数据和规则；计划由服务器运行Qwen，通过OpenAI兼容HTTP接口调用。服务器地址、服务模型ID和密钥由外部配置提供，不硬编码进数据模型。当前.env.example仅为预留约定，CLI尚未加载它或发起网络请求。
 
-后续顺序：规则基线与评测 → 服务器环境核验和Qwen部署/连通 → 相同数据上的模型基线 → OCR扩展。详见docs/runtime-and-server.md。
+后续顺序：服务器环境核验和Qwen部署/连通 → 相同数据上的模型基线比较 → 独立验证数据与OCR扩展。详见docs/runtime-and-server.md。
 
 公开数据、模型权重、真实业务文件、.env、虚拟环境和运行产物不提交Git。暂未声明本项目开源许可证，仓库可访问不等于数据和模型可重新分发。
 

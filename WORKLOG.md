@@ -12,19 +12,29 @@
 ## 当前状态
 
 - 3模板/15组模拟开发数据已生成于data/dev/v0.1.0：A纵向PDF、B分组Excel、C横向PDF含两个访问项目；6正常、5冲突、4缺失，总计175字段、143文件。
-- 每组含可见input.json、documents及分离的ground_truth.json、annotations.json；manifest登记种子20261012、版本、模板族、实体、规则、异常与文件哈希。没有预测result.json、模型调用或独立人工核验。
+- 每组含可见input.json、documents及分离的ground_truth.json、annotations.json；manifest登记种子20261012、版本、模板族、实体、规则、异常与文件哈希。预测独立保存在runs/，原数据集内没有result.json；没有模型调用或独立人工核验。
 - 数据审计与新进程完整字节复现均通过；结果在docs/dev-dataset-audit.json，操作与限制在docs/dev-dataset.md。生成的数据按原约定忽略Git，源码可重新生成；输出已存在时拒绝覆盖。
 
 - 0.1.0数据契约已实现：Pydantic数据契约、跨对象引用/证据/状态/计算链校验、独立GroundTruth、文本原文件核验、JSON Schema导出和CLI。
 - data/examples/normal与conflict均为手工模拟样例，各含原始材料、输入、预构造结果和独立答案；正常样例5字段verified，冲突样例护照号码null并请求确认。
-- WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；当前86项测试通过（63项契约、23项开发数据检查）。
+- WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；当前100项测试通过（63项契约、23项开发数据检查、14项规则基线与独立评测集成检查）。
 - data/dev、validation、holdout、external已建立，内容默认忽略Git；data/examples内虚构样例可提交。运行产物使用runs/，权重不放项目仓库。
-- 已初始化独立Git仓库及codex/contracts-baseline分支，origin指向用户仓库。通过现有Windows网关代理已连通GitHub，远端没有分支引用；已有SSH身份验证为zzhuqshun。首个实现提交5800bab已推送至origin/codex/contracts-baseline并建立跟踪。
+- 已初始化独立Git仓库及codex/contracts-baseline分支，origin指向用户仓库并建立跟踪，契约与开发数据实现已发布。通过现有Windows网关代理连通GitHub，已有SSH身份验证为zzhuqshun。
 - WSL可访问PyPI；Windows系统代理为localhost，WSL启动报告NAT模式未镜像该代理；仅为本项目设置Git代理和SSH推送方式，未更改Windows/WSL系统网络配置。
 - 远端配置示例在.env.example，部署计划在docs/runtime-and-server.md；没有模型适配器、SSH连接、模型安装或服务调用。
-- CLI可生成及审计开发数据，validate命令校验已有结果；没有自动理解或填报表单。通用证据核验支持UTF-8文本，开发数据审计额外检查自建PDF/Excel的空白字段区域；通用解析器和OCR尚未实现。
+- CLI新增fill-rule、run-rule-baseline、evaluate；规则版从实际PDF矩形/Excel空白合并单元格识别字段，读取UTF-8参考文本并生成JSON草稿，先保存全部预测再打开答案。正式运行15题/175字段通过，190候选、13计算链通过，6题completed、9题needs_review、12个请求；详见docs/rule-baseline-report.json和docs/rule-baseline.md。物理证据核验已支持文本、PDF文本区域、Excel单元格；通用任意表单理解、OCR及文件写回尚未实现。
 
 ## 工作记录
+
+### 2026-10-12（实际文件规则填报与独立评测）
+
+- 新增smartfill/parsing.py、baseline.py、evaluate.py、experiments.py及tests/test_baseline.py；扩展integrity.py物理回读，CLI增加fill-rule、run-rule-baseline、evaluate，保持0.1.0数据契约不变。
+- 从真实PDF矩形和Excel标签/合并空白格发现字段，使用独立生成的字段ID；仅按可见标签、显式项目编号与姓名对应关系提取事实，不读取gold、annotations、manifest或任务ID场景映射。
+- 保留同值不同来源候选；冲突、缺失、非法日期和未知标签不产生非空建议。模拟日期计算合并同一语义相同归一化值的来源证据；初次评测发现DEV-002天数数值正确但计算证据不完整，修正后独立评测通过，未修改答案。
+- 批量先保存所有预测，再独立加载GroundTruth、验证原文件并按位置/结构对齐；新增漏字段、重复位置、错误归一化、全部拒填、丢弃候选、答案文件缺席、任务/文档ID变化及评测中断保留预测等检查。
+- 单任务fill-rule/evaluate命令通过，原数据集重新审计passed且六部分日志结构检查通过；完整100项测试通过；正式运行runs/rule-20261012-112510-7cd43af9覆盖15题175字段，163个verified、5个conflict、1个review_required、6个missing；190候选和13计算链通过，6题completed、9题needs_review、12个处理请求，无运行错误。
+- 新增docs/rule-baseline.md和真实运行摘要docs/rule-baseline-report.json，更新README、data说明。本轮所有编辑、测试及Git操作在WSL完成；未调用模型、部署服务器、运行OCR或将值写回PDF/Excel。
+- 评测范围明确：可填字段的证据组合及所有来源候选可评测；当前契约不支持为异常字段外挂非候选校验依据，未声称完整校验其跨字段推理证据。本轮仍是受控开发回归，无独立人工核验/泛化结论。
 
 ### 2026-10-12（3模板15组开发数据生成与审计）
 
@@ -109,9 +119,9 @@
 
 ## 待办与风险
 
-- GitHub连接已恢复，首个实现提交已上传；WSL网关IP变化后需刷新本仓库代理与SSH连接参数，详见README。
-- 下一阶段：实际文件解析入口、规则填报基线，以及按字段位置/结构对齐、有明确分子分母的独立评测；基线不得读取gold、annotations或manifest异常标签。
-- PDF/Excel/Word解析、OCR、归一化、实体关联及其他业务规则未实现，引用一致性不能替代能力测试。
+- GitHub连接已恢复，开发分支已上传；WSL网关IP变化后需刷新本仓库代理与SSH连接参数，详见README。
+- 下一阶段：核验服务器连接/GPU/目录，部署并连通Qwen后运行相同任务，与规则基线比较；后续补独立模板族/实体验证集及人工核验。
+- 仅支持受控布局的文本PDF/单工作表Excel及UTF-8参考材料；扫描/旋转PDF、Word、OCR、复杂Excel、多人员消歧及其他业务规则未实现。当前输出JSON草稿，未写回表单；异常跨字段推理证据评分受契约限制，引用一致性不能替代能力测试。
 - 服务器SSH主机、端口、用户名、登录方式和可用目录待提供；交接所述4×A100未核验；具体Qwen权重和vLLM版本部署前查官方来源。
 - 公开数据下载前补查截断许可列与官方链接；方案PDF未保留链接目标。
 - 两个手工样例独立于15组开发集；开发集仍为受控模板和单人员文本材料，所有human_reviewed=false，不用于未知模板泛化或真实业务结论。需要后续独立人工核验和隔离模板族/实体的留出集。
@@ -123,13 +133,14 @@
 ~~~bash
 .venv/bin/python -m pytest
 .venv/bin/python -m smartfill audit-dataset data/dev/v0.1.0
+.venv/bin/python -m smartfill run-rule-baseline data/dev/v0.1.0
 .venv/bin/python -m smartfill validate data/examples/normal
 .venv/bin/python -m smartfill validate data/examples/conflict
 .venv/bin/python -m smartfill export-schemas schemas
 git status --short
 ~~~
 
-- 86项测试包含原63项契约检查和新增23项数据检查；契约测试覆盖往返序列化、引用/类型/状态/计算约束、独立答案、原文件哈希/引用核验及Schema确定性导出。
+- 当前100项测试包含63项契约检查、23项数据检查和14项规则填报/独立评测集成检查；契约测试覆盖往返序列化、引用/类型/状态/计算约束、独立答案、原文件哈希/引用核验及Schema确定性导出。
 - 两个CLI样例通过；人工夹具timing=0不作为耗时测量。
 - Linux新进程检查Python语法、JSON解析与文件头，拒绝%TSD-Header；PDF与PNG以明文字节重建。
 - 历史来源核验：机器人读取revision 10；13页PDF已渲染查看第7–10页并查看第8、10页两表原图，没有线上写入。

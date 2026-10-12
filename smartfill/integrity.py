@@ -289,7 +289,7 @@ def validate_ground_truth(task: TaskInput, truth: GroundTruth) -> None:
 def verify_artifacts(
     task: TaskInput, root: Path, parsed: Iterable[ParsedDocument] = (), truth: GroundTruth | None = None
 ) -> None:
-    """Check file hashes and text anchors. PDF/Office/OCR physical checks come later."""
+    """Check hashes and physical text/PDF/cell regions; OCR and rotated sources are unsupported."""
     root = root.resolve(strict=True)
     documents = unique_index(task.documents, "document_id")
     content: dict[str, bytes] = {}
@@ -303,11 +303,13 @@ def verify_artifacts(
 
     def source_text(document_id, locator):
         require(document_id in documents, "unknown artifact source document")
-        require(locator.kind == "text" and documents[document_id].media_type == "text/plain",
-                "physical anchor verification currently supports text/plain only")
-        lines = content[document_id].decode("utf-8").splitlines()
-        require(locator.line_end <= len(lines), "text locator exceeds physical document")
-        return "\n".join(lines[locator.line_start - 1:locator.line_end])
+        if locator.kind == "text" and documents[document_id].media_type == "text/plain":
+            lines = content[document_id].decode("utf-8").splitlines()
+            require(locator.line_end <= len(lines), "text locator exceeds physical document")
+            return "\n".join(lines[locator.line_start - 1:locator.line_end])
+        from .parsing import read_region
+        path = (root / documents[document_id].relative_path).resolve(strict=True)
+        return read_region(documents[document_id], path, locator)
 
     for document in parsed:
         for segment in document.segments:

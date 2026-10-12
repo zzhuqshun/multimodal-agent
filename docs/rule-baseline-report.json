@@ -1,0 +1,218 @@
+{
+  "tasks": 15,
+  "counts": {
+    "gold_fields": 175,
+    "predicted_fields": 175,
+    "fillable_gold": 163,
+    "refusal_gold": 12,
+    "gold_conflicts": 5,
+    "predicted_conflicts": 5,
+    "predicted_nonempty": 163,
+    "gold_candidates": 190,
+    "predicted_candidates": 190,
+    "evidence_gold": 163,
+    "calculation_gold": 13,
+    "identified": 175,
+    "matched_candidates": 190,
+    "aligned_fillable": 163,
+    "aligned_correct_values": 163,
+    "correct_evidence": 163,
+    "correct_states_actions": 175,
+    "conflict_tp": 5,
+    "fully_correct_fields": 175,
+    "correct_calculations": 13,
+    "wrong_fills": 0,
+    "correct_refusals": 12
+  },
+  "metrics": {
+    "field_precision": {
+      "numerator": 175,
+      "denominator": 175,
+      "value": 1.0
+    },
+    "field_recall": {
+      "numerator": 175,
+      "denominator": 175,
+      "value": 1.0
+    },
+    "field_f1": {
+      "numerator": 350,
+      "denominator": 350,
+      "value": 1.0
+    },
+    "aligned_value_accuracy": {
+      "numerator": 163,
+      "denominator": 163,
+      "value": 1.0
+    },
+    "end_to_end_value_recall": {
+      "numerator": 163,
+      "denominator": 163,
+      "value": 1.0
+    },
+    "state_action_accuracy": {
+      "numerator": 175,
+      "denominator": 175,
+      "value": 1.0
+    },
+    "wrong_fill_rate": {
+      "numerator": 0,
+      "denominator": 163,
+      "value": 0.0
+    },
+    "conflict_precision": {
+      "numerator": 5,
+      "denominator": 5,
+      "value": 1.0
+    },
+    "conflict_recall": {
+      "numerator": 5,
+      "denominator": 5,
+      "value": 1.0
+    },
+    "correct_refusal_rate": {
+      "numerator": 12,
+      "denominator": 12,
+      "value": 1.0
+    },
+    "filled_field_evidence_accuracy": {
+      "numerator": 163,
+      "denominator": 163,
+      "value": 1.0
+    },
+    "source_candidate_precision": {
+      "numerator": 190,
+      "denominator": 190,
+      "value": 1.0
+    },
+    "source_candidate_recall": {
+      "numerator": 190,
+      "denominator": 190,
+      "value": 1.0
+    },
+    "calculation_chain_accuracy": {
+      "numerator": 13,
+      "denominator": 13,
+      "value": 1.0
+    },
+    "full_field_pass_rate": {
+      "numerator": 175,
+      "denominator": 175,
+      "value": 1.0
+    },
+    "task_pass_rate": {
+      "numerator": 15,
+      "denominator": 15,
+      "value": 1.0
+    }
+  },
+  "task_statuses": {
+    "completed": 6,
+    "needs_review": 9
+  },
+  "pending_requests": 12,
+  "timing_ms": {
+    "sum": 2232.3580180000135,
+    "median": 105.48214400000688,
+    "p95": 254.24690900013047
+  },
+  "failure_stages": {},
+  "evaluation_scope": "controlled development tasks; evidence metric covers filled fields only; no generalization claim",
+  "run_id": "rule-20261012-112510-7cd43af9",
+  "dataset": "/home/user773/multimodal_agent/data/dev/v0.1.0",
+  "directory": "/home/user773/multimodal_agent/runs/rule-20261012-112510-7cd43af9",
+  "baseline": "rule-baseline-0.1.0",
+  "model_calls": 0,
+  "task_results": [
+    {
+      "task_id": "DEV-001",
+      "task_pass": true,
+      "task_status": "completed",
+      "result_path": "tasks/task-0001/result.json"
+    },
+    {
+      "task_id": "DEV-002",
+      "task_pass": true,
+      "task_status": "completed",
+      "result_path": "tasks/task-0002/result.json"
+    },
+    {
+      "task_id": "DEV-003",
+      "task_pass": true,
+      "task_status": "completed",
+      "result_path": "tasks/task-0003/result.json"
+    },
+    {
+      "task_id": "DEV-004",
+      "task_pass": true,
+      "task_status": "completed",
+      "result_path": "tasks/task-0004/result.json"
+    },
+    {
+      "task_id": "DEV-005",
+      "task_pass": true,
+      "task_status": "completed",
+      "result_path": "tasks/task-0005/result.json"
+    },
+    {
+      "task_id": "DEV-006",
+      "task_pass": true,
+      "task_status": "completed",
+      "result_path": "tasks/task-0006/result.json"
+    },
+    {
+      "task_id": "DEV-007",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0007/result.json"
+    },
+    {
+      "task_id": "DEV-008",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0008/result.json"
+    },
+    {
+      "task_id": "DEV-009",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0009/result.json"
+    },
+    {
+      "task_id": "DEV-010",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0010/result.json"
+    },
+    {
+      "task_id": "DEV-011",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0011/result.json"
+    },
+    {
+      "task_id": "DEV-012",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0012/result.json"
+    },
+    {
+      "task_id": "DEV-013",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0013/result.json"
+    },
+    {
+      "task_id": "DEV-014",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0014/result.json"
+    },
+    {
+      "task_id": "DEV-015",
+      "task_pass": true,
+      "task_status": "needs_review",
+      "result_path": "tasks/task-0015/result.json"
+    }
+  ]
+}
