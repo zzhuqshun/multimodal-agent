@@ -1,0 +1,16 @@
+[project]
+name = "smartfill-framework"
+version = "0.1.0"
+description = "Evidence-backed contracts for multimodal form filling"
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2.10,<3"]
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "jsonschema>=4.23,<5"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

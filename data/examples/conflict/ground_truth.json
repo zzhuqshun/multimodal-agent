@@ -1,0 +1,527 @@
+{
+  "schema_version": "0.1.0",
+  "task_id": "EXAMPLE-conflict",
+  "dataset_version": "handcrafted-contract-examples-0.1.0",
+  "expected_form": {
+    "schema_version": "0.1.0",
+    "form_id": "handcrafted-form",
+    "target_document_id": "form",
+    "fields": [
+      {
+        "schema_version": "0.1.0",
+        "field_id": "gold-name",
+        "label": "Name",
+        "value_type": "text",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 1,
+          "line_end": 1
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "source-agreement"
+        ]
+      },
+      {
+        "schema_version": "0.1.0",
+        "field_id": "gold-passport",
+        "label": "Passport number",
+        "value_type": "text",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 2,
+          "line_end": 2
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "source-agreement"
+        ]
+      },
+      {
+        "schema_version": "0.1.0",
+        "field_id": "gold-departure",
+        "label": "Departure date",
+        "value_type": "date",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 3,
+          "line_end": 3
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "source-agreement"
+        ]
+      },
+      {
+        "schema_version": "0.1.0",
+        "field_id": "gold-return",
+        "label": "Return date",
+        "value_type": "date",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 4,
+          "line_end": 4
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "source-agreement"
+        ]
+      },
+      {
+        "schema_version": "0.1.0",
+        "field_id": "gold-days",
+        "label": "Trip days",
+        "value_type": "integer",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 5,
+          "line_end": 5
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "trip-days"
+        ]
+      }
+    ],
+    "groups": []
+  },
+  "expected_fields": [
+    {
+      "schema_version": "0.1.0",
+      "gold_field_id": "gold-name",
+      "accepted_values": [
+        {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "value": "Lin Qiao"
+        }
+      ],
+      "expected_status": "verified",
+      "expected_action": "fill",
+      "expected_candidates": [
+        {
+          "schema_version": "0.1.0",
+          "value": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "value": "Lin Qiao"
+          },
+          "evidence": [
+            {
+              "schema_version": "0.1.0",
+              "document_id": "passport",
+              "locator": {
+                "schema_version": "0.1.0",
+                "kind": "text",
+                "line_start": 2,
+                "line_end": 2
+              },
+              "quote": "Lin Qiao",
+              "start": 6,
+              "end": 14
+            }
+          ]
+        },
+        {
+          "schema_version": "0.1.0",
+          "value": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "value": "Lin Qiao"
+          },
+          "evidence": [
+            {
+              "schema_version": "0.1.0",
+              "document_id": "invitation",
+              "locator": {
+                "schema_version": "0.1.0",
+                "kind": "text",
+                "line_start": 2,
+                "line_end": 2
+              },
+              "quote": "Lin Qiao",
+              "start": 6,
+              "end": 14
+            }
+          ]
+        }
+      ],
+      "evidence_alternatives": [
+        [
+          {
+            "schema_version": "0.1.0",
+            "document_id": "passport",
+            "locator": {
+              "schema_version": "0.1.0",
+              "kind": "text",
+              "line_start": 2,
+              "line_end": 2
+            },
+            "quote": "Lin Qiao",
+            "start": 6,
+            "end": 14
+          }
+        ],
+        [
+          {
+            "schema_version": "0.1.0",
+            "document_id": "invitation",
+            "locator": {
+              "schema_version": "0.1.0",
+              "kind": "text",
+              "line_start": 2,
+              "line_end": 2
+            },
+            "quote": "Lin Qiao",
+            "start": 6,
+            "end": 14
+          }
+        ]
+      ],
+      "expected_issue_codes": [],
+      "expected_calculation": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "gold_field_id": "gold-passport",
+      "accepted_values": [
+        null
+      ],
+      "expected_status": "conflict",
+      "expected_action": "request_confirmation",
+      "expected_candidates": [
+        {
+          "schema_version": "0.1.0",
+          "value": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "value": "P00001234"
+          },
+          "evidence": [
+            {
+              "schema_version": "0.1.0",
+              "document_id": "passport",
+              "locator": {
+                "schema_version": "0.1.0",
+                "kind": "text",
+                "line_start": 3,
+                "line_end": 3
+              },
+              "quote": "P00001234",
+              "start": 10,
+              "end": 19
+            }
+          ]
+        },
+        {
+          "schema_version": "0.1.0",
+          "value": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "value": "P00005678"
+          },
+          "evidence": [
+            {
+              "schema_version": "0.1.0",
+              "document_id": "invitation",
+              "locator": {
+                "schema_version": "0.1.0",
+                "kind": "text",
+                "line_start": 3,
+                "line_end": 3
+              },
+              "quote": "P00005678",
+              "start": 10,
+              "end": 19
+            }
+          ]
+        }
+      ],
+      "evidence_alternatives": [
+        [
+          {
+            "schema_version": "0.1.0",
+            "document_id": "passport",
+            "locator": {
+              "schema_version": "0.1.0",
+              "kind": "text",
+              "line_start": 3,
+              "line_end": 3
+            },
+            "quote": "P00001234",
+            "start": 10,
+            "end": 19
+          }
+        ],
+        [
+          {
+            "schema_version": "0.1.0",
+            "document_id": "invitation",
+            "locator": {
+              "schema_version": "0.1.0",
+              "kind": "text",
+              "line_start": 3,
+              "line_end": 3
+            },
+            "quote": "P00005678",
+            "start": 10,
+            "end": 19
+          }
+        ]
+      ],
+      "expected_issue_codes": [
+        "source_conflict"
+      ],
+      "expected_calculation": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "gold_field_id": "gold-departure",
+      "accepted_values": [
+        {
+          "schema_version": "0.1.0",
+          "kind": "date",
+          "value": "2026-11-03"
+        }
+      ],
+      "expected_status": "verified",
+      "expected_action": "fill",
+      "expected_candidates": [
+        {
+          "schema_version": "0.1.0",
+          "value": {
+            "schema_version": "0.1.0",
+            "kind": "date",
+            "value": "2026-11-03"
+          },
+          "evidence": [
+            {
+              "schema_version": "0.1.0",
+              "document_id": "invitation",
+              "locator": {
+                "schema_version": "0.1.0",
+                "kind": "text",
+                "line_start": 4,
+                "line_end": 4
+              },
+              "quote": "2026-11-03",
+              "start": 11,
+              "end": 21
+            }
+          ]
+        }
+      ],
+      "evidence_alternatives": [
+        [
+          {
+            "schema_version": "0.1.0",
+            "document_id": "invitation",
+            "locator": {
+              "schema_version": "0.1.0",
+              "kind": "text",
+              "line_start": 4,
+              "line_end": 4
+            },
+            "quote": "2026-11-03",
+            "start": 11,
+            "end": 21
+          }
+        ]
+      ],
+      "expected_issue_codes": [],
+      "expected_calculation": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "gold_field_id": "gold-return",
+      "accepted_values": [
+        {
+          "schema_version": "0.1.0",
+          "kind": "date",
+          "value": "2026-11-07"
+        }
+      ],
+      "expected_status": "verified",
+      "expected_action": "fill",
+      "expected_candidates": [
+        {
+          "schema_version": "0.1.0",
+          "value": {
+            "schema_version": "0.1.0",
+            "kind": "date",
+            "value": "2026-11-07"
+          },
+          "evidence": [
+            {
+              "schema_version": "0.1.0",
+              "document_id": "invitation",
+              "locator": {
+                "schema_version": "0.1.0",
+                "kind": "text",
+                "line_start": 5,
+                "line_end": 5
+              },
+              "quote": "2026-11-07",
+              "start": 8,
+              "end": 18
+            }
+          ]
+        }
+      ],
+      "evidence_alternatives": [
+        [
+          {
+            "schema_version": "0.1.0",
+            "document_id": "invitation",
+            "locator": {
+              "schema_version": "0.1.0",
+              "kind": "text",
+              "line_start": 5,
+              "line_end": 5
+            },
+            "quote": "2026-11-07",
+            "start": 8,
+            "end": 18
+          }
+        ]
+      ],
+      "expected_issue_codes": [],
+      "expected_calculation": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "gold_field_id": "gold-days",
+      "accepted_values": [
+        {
+          "schema_version": "0.1.0",
+          "kind": "integer",
+          "value": 5
+        }
+      ],
+      "expected_status": "verified",
+      "expected_action": "fill",
+      "expected_candidates": [],
+      "evidence_alternatives": [
+        [
+          {
+            "schema_version": "0.1.0",
+            "document_id": "invitation",
+            "locator": {
+              "schema_version": "0.1.0",
+              "kind": "text",
+              "line_start": 4,
+              "line_end": 4
+            },
+            "quote": "2026-11-03",
+            "start": 11,
+            "end": 21
+          },
+          {
+            "schema_version": "0.1.0",
+            "document_id": "invitation",
+            "locator": {
+              "schema_version": "0.1.0",
+              "kind": "text",
+              "line_start": 5,
+              "line_end": 5
+            },
+            "quote": "2026-11-07",
+            "start": 8,
+            "end": 18
+          }
+        ]
+      ],
+      "expected_issue_codes": [],
+      "expected_calculation": {
+        "schema_version": "0.1.0",
+        "rule_id": "trip-days",
+        "rule_version": "1",
+        "inputs": [
+          {
+            "schema_version": "0.1.0",
+            "value": {
+              "schema_version": "0.1.0",
+              "kind": "date",
+              "value": "2026-11-03"
+            },
+            "evidence": [
+              {
+                "schema_version": "0.1.0",
+                "document_id": "invitation",
+                "locator": {
+                  "schema_version": "0.1.0",
+                  "kind": "text",
+                  "line_start": 4,
+                  "line_end": 4
+                },
+                "quote": "2026-11-03",
+                "start": 11,
+                "end": 21
+              }
+            ]
+          },
+          {
+            "schema_version": "0.1.0",
+            "value": {
+              "schema_version": "0.1.0",
+              "kind": "date",
+              "value": "2026-11-07"
+            },
+            "evidence": [
+              {
+                "schema_version": "0.1.0",
+                "document_id": "invitation",
+                "locator": {
+                  "schema_version": "0.1.0",
+                  "kind": "text",
+                  "line_start": 5,
+                  "line_end": 5
+                },
+                "quote": "2026-11-07",
+                "start": 8,
+                "end": 18
+              }
+            ]
+          }
+        ],
+        "expected_value": {
+          "schema_version": "0.1.0",
+          "kind": "integer",
+          "value": 5
+        },
+        "unit": "days"
+      }
+    }
+  ],
+  "annotation_provenance": {
+    "schema_version": "0.1.0",
+    "method": "handcrafted",
+    "version": "1",
+    "independently_reviewed": false
+  }
+}

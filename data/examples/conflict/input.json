@@ -1,0 +1,57 @@
+{
+  "schema_version": "0.1.0",
+  "task_id": "EXAMPLE-conflict",
+  "description": "Handcrafted contract fixture; no OCR or model run.",
+  "target_document_id": "form",
+  "documents": [
+    {
+      "schema_version": "0.1.0",
+      "document_id": "form",
+      "role": "target_form",
+      "media_type": "text/plain",
+      "relative_path": "documents/form.txt",
+      "sha256": "2c802016ad7f79e8799988773f90d3648e30923e7f2ed9f3d7f1e019296d2cc5",
+      "synthetic": true,
+      "document_type": "form"
+    },
+    {
+      "schema_version": "0.1.0",
+      "document_id": "passport",
+      "role": "reference",
+      "media_type": "text/plain",
+      "relative_path": "documents/passport.txt",
+      "sha256": "9a0f15a1fe4324ae137b293e4cf8b8194324f09eba6101f2a3bbec79a0ba221a",
+      "synthetic": true,
+      "document_type": "passport"
+    },
+    {
+      "schema_version": "0.1.0",
+      "document_id": "invitation",
+      "role": "reference",
+      "media_type": "text/plain",
+      "relative_path": "documents/invitation.txt",
+      "sha256": "22f3d0e58e4ef94262b44196442f92fb41d6f5e6fc9cd20e74f6101b23a672e2",
+      "synthetic": true,
+      "document_type": "invitation"
+    }
+  ],
+  "ruleset_id": "simulated-travel",
+  "ruleset_version": "1",
+  "rules": [
+    {
+      "schema_version": "0.1.0",
+      "rule_id": "source-agreement",
+      "version": "1",
+      "kind": "consistency",
+      "description": "Simulated rule: incompatible values require human confirmation."
+    },
+    {
+      "schema_version": "0.1.0",
+      "rule_id": "trip-days",
+      "version": "1",
+      "kind": "date_days_inclusive",
+      "description": "Simulated rule: count both departure and return dates."
+    }
+  ],
+  "as_of_date": "2026-10-12"
+}

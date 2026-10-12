@@ -1,0 +1,1113 @@
+{
+  "$defs": {
+    "AnnotationProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "method": {
+          "enum": [
+            "handcrafted",
+            "synthetic_generator",
+            "human"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Version",
+          "type": "string"
+        },
+        "independently_reviewed": {
+          "title": "Independently Reviewed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "method",
+        "version",
+        "independently_reviewed"
+      ],
+      "title": "AnnotationProvenance",
+      "type": "object"
+    },
+    "BooleanValue": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "boolean",
+          "default": "boolean",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "BooleanValue",
+      "type": "object"
+    },
+    "CellLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "cell",
+          "default": "cell",
+          "title": "Kind",
+          "type": "string"
+        },
+        "sheet": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Sheet",
+          "type": "string"
+        },
+        "cell_range": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Cell Range",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sheet",
+        "cell_range"
+      ],
+      "title": "CellLocator",
+      "type": "object"
+    },
+    "DateValue": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "date",
+          "default": "date",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "format": "date",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "DateValue",
+      "type": "object"
+    },
+    "DecimalValue": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "decimal",
+          "default": "decimal",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+          "title": "Value",
+          "type": "string"
+        },
+        "unit": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ],
+      "title": "DecimalValue",
+      "type": "object"
+    },
+    "ExpectedCalculation": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "rule_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "inputs": {
+          "items": {
+            "$ref": "#/$defs/ExpectedCandidate"
+          },
+          "minItems": 1,
+          "title": "Inputs",
+          "type": "array"
+        },
+        "expected_value": {
+          "discriminator": {
+            "mapping": {
+              "boolean": "#/$defs/BooleanValue",
+              "date": "#/$defs/DateValue",
+              "decimal": "#/$defs/DecimalValue",
+              "integer": "#/$defs/IntegerValue",
+              "text": "#/$defs/TextValue",
+              "text_list": "#/$defs/TextListValue"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextValue"
+            },
+            {
+              "$ref": "#/$defs/DateValue"
+            },
+            {
+              "$ref": "#/$defs/IntegerValue"
+            },
+            {
+              "$ref": "#/$defs/DecimalValue"
+            },
+            {
+              "$ref": "#/$defs/BooleanValue"
+            },
+            {
+              "$ref": "#/$defs/TextListValue"
+            }
+          ],
+          "title": "Expected Value"
+        },
+        "unit": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "rule_version",
+        "inputs",
+        "expected_value",
+        "unit"
+      ],
+      "title": "ExpectedCalculation",
+      "type": "object"
+    },
+    "ExpectedCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "value": {
+          "discriminator": {
+            "mapping": {
+              "boolean": "#/$defs/BooleanValue",
+              "date": "#/$defs/DateValue",
+              "decimal": "#/$defs/DecimalValue",
+              "integer": "#/$defs/IntegerValue",
+              "text": "#/$defs/TextValue",
+              "text_list": "#/$defs/TextListValue"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextValue"
+            },
+            {
+              "$ref": "#/$defs/DateValue"
+            },
+            {
+              "$ref": "#/$defs/IntegerValue"
+            },
+            {
+              "$ref": "#/$defs/DecimalValue"
+            },
+            {
+              "$ref": "#/$defs/BooleanValue"
+            },
+            {
+              "$ref": "#/$defs/TextListValue"
+            }
+          ],
+          "title": "Value"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/GoldEvidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "value",
+        "evidence"
+      ],
+      "title": "ExpectedCandidate",
+      "type": "object"
+    },
+    "ExpectedField": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "gold_field_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Gold Field Id",
+          "type": "string"
+        },
+        "accepted_values": {
+          "items": {
+            "anyOf": [
+              {
+                "discriminator": {
+                  "mapping": {
+                    "boolean": "#/$defs/BooleanValue",
+                    "date": "#/$defs/DateValue",
+                    "decimal": "#/$defs/DecimalValue",
+                    "integer": "#/$defs/IntegerValue",
+                    "text": "#/$defs/TextValue",
+                    "text_list": "#/$defs/TextListValue"
+                  },
+                  "propertyName": "kind"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/TextValue"
+                  },
+                  {
+                    "$ref": "#/$defs/DateValue"
+                  },
+                  {
+                    "$ref": "#/$defs/IntegerValue"
+                  },
+                  {
+                    "$ref": "#/$defs/DecimalValue"
+                  },
+                  {
+                    "$ref": "#/$defs/BooleanValue"
+                  },
+                  {
+                    "$ref": "#/$defs/TextListValue"
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Accepted Values",
+          "type": "array"
+        },
+        "expected_status": {
+          "enum": [
+            "verified",
+            "conflict",
+            "missing",
+            "review_required",
+            "needs_calculation",
+            "not_applicable"
+          ],
+          "title": "Expected Status",
+          "type": "string"
+        },
+        "expected_action": {
+          "enum": [
+            "fill",
+            "request_documents",
+            "request_confirmation",
+            "calculate",
+            "leave_blank"
+          ],
+          "title": "Expected Action",
+          "type": "string"
+        },
+        "expected_candidates": {
+          "items": {
+            "$ref": "#/$defs/ExpectedCandidate"
+          },
+          "title": "Expected Candidates",
+          "type": "array"
+        },
+        "evidence_alternatives": {
+          "items": {
+            "items": {
+              "$ref": "#/$defs/GoldEvidence"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "title": "Evidence Alternatives",
+          "type": "array"
+        },
+        "expected_issue_codes": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+            "type": "string"
+          },
+          "title": "Expected Issue Codes",
+          "type": "array"
+        },
+        "expected_calculation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExpectedCalculation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "gold_field_id",
+        "accepted_values",
+        "expected_status",
+        "expected_action"
+      ],
+      "title": "ExpectedField",
+      "type": "object"
+    },
+    "FieldCondition": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "field_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Field Id",
+          "type": "string"
+        },
+        "operator": {
+          "const": "equals",
+          "default": "equals",
+          "title": "Operator",
+          "type": "string"
+        },
+        "value": {
+          "discriminator": {
+            "mapping": {
+              "boolean": "#/$defs/BooleanValue",
+              "date": "#/$defs/DateValue",
+              "decimal": "#/$defs/DecimalValue",
+              "integer": "#/$defs/IntegerValue",
+              "text": "#/$defs/TextValue",
+              "text_list": "#/$defs/TextListValue"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextValue"
+            },
+            {
+              "$ref": "#/$defs/DateValue"
+            },
+            {
+              "$ref": "#/$defs/IntegerValue"
+            },
+            {
+              "$ref": "#/$defs/DecimalValue"
+            },
+            {
+              "$ref": "#/$defs/BooleanValue"
+            },
+            {
+              "$ref": "#/$defs/TextListValue"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "field_id",
+        "value"
+      ],
+      "title": "FieldCondition",
+      "type": "object"
+    },
+    "FormField": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "field_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Field Id",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Label",
+          "type": "string"
+        },
+        "value_type": {
+          "enum": [
+            "text",
+            "date",
+            "integer",
+            "decimal",
+            "boolean",
+            "text_list"
+          ],
+          "title": "Value Type",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "target_locator": {
+          "discriminator": {
+            "mapping": {
+              "cell": "#/$defs/CellLocator",
+              "page": "#/$defs/PageLocator",
+              "text": "#/$defs/TextLocator",
+              "word_cell": "#/$defs/WordCellLocator",
+              "word_paragraph": "#/$defs/WordParagraphLocator"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextLocator"
+            },
+            {
+              "$ref": "#/$defs/PageLocator"
+            },
+            {
+              "$ref": "#/$defs/CellLocator"
+            },
+            {
+              "$ref": "#/$defs/WordParagraphLocator"
+            },
+            {
+              "$ref": "#/$defs/WordCellLocator"
+            }
+          ],
+          "title": "Target Locator"
+        },
+        "semantic_key": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Semantic Key"
+        },
+        "group_id": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Group Id"
+        },
+        "row_id": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Row Id"
+        },
+        "required_when": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldCondition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "rule_ids": {
+          "items": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+            "type": "string"
+          },
+          "title": "Rule Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field_id",
+        "label",
+        "value_type",
+        "required",
+        "target_locator"
+      ],
+      "title": "FormField",
+      "type": "object"
+    },
+    "FormGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "group_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Group Id",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Label",
+          "type": "string"
+        },
+        "repeatable": {
+          "default": false,
+          "title": "Repeatable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "group_id",
+        "label"
+      ],
+      "title": "FormGroup",
+      "type": "object"
+    },
+    "FormSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "form_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Form Id",
+          "type": "string"
+        },
+        "target_document_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Target Document Id",
+          "type": "string"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/FormField"
+          },
+          "minItems": 1,
+          "title": "Fields",
+          "type": "array"
+        },
+        "groups": {
+          "items": {
+            "$ref": "#/$defs/FormGroup"
+          },
+          "title": "Groups",
+          "type": "array"
+        }
+      },
+      "required": [
+        "form_id",
+        "target_document_id",
+        "fields"
+      ],
+      "title": "FormSchema",
+      "type": "object"
+    },
+    "GoldEvidence": {
+      "additionalProperties": false,
+      "description": "Independent source anchor; never references prediction-generated IDs.",
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "document_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "locator": {
+          "discriminator": {
+            "mapping": {
+              "cell": "#/$defs/CellLocator",
+              "page": "#/$defs/PageLocator",
+              "text": "#/$defs/TextLocator",
+              "word_cell": "#/$defs/WordCellLocator",
+              "word_paragraph": "#/$defs/WordParagraphLocator"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextLocator"
+            },
+            {
+              "$ref": "#/$defs/PageLocator"
+            },
+            {
+              "$ref": "#/$defs/CellLocator"
+            },
+            {
+              "$ref": "#/$defs/WordParagraphLocator"
+            },
+            {
+              "$ref": "#/$defs/WordCellLocator"
+            }
+          ],
+          "title": "Locator"
+        },
+        "quote": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Quote",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "document_id",
+        "locator",
+        "quote",
+        "start",
+        "end"
+      ],
+      "title": "GoldEvidence",
+      "type": "object"
+    },
+    "IntegerValue": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "integer",
+          "default": "integer",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "IntegerValue",
+      "type": "object"
+    },
+    "PageLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "page",
+          "default": "page",
+          "title": "Kind",
+          "type": "string"
+        },
+        "page": {
+          "minimum": 1,
+          "title": "Page",
+          "type": "integer"
+        },
+        "bbox": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            }
+          ],
+          "title": "Bbox",
+          "type": "array"
+        },
+        "coordinate_frame": {
+          "const": "normalized_top_left_rotation_corrected",
+          "default": "normalized_top_left_rotation_corrected",
+          "title": "Coordinate Frame",
+          "type": "string"
+        },
+        "source_rotation_degrees": {
+          "default": 0,
+          "enum": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "title": "Source Rotation Degrees",
+          "type": "integer"
+        },
+        "source_to_canonical": {
+          "anyOf": [
+            {
+              "maxItems": 6,
+              "minItems": 6,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source To Canonical"
+        }
+      },
+      "required": [
+        "page",
+        "bbox"
+      ],
+      "title": "PageLocator",
+      "type": "object"
+    },
+    "TextListValue": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "text_list",
+          "default": "text_list",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Value",
+          "type": "array"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "TextListValue",
+      "type": "object"
+    },
+    "TextLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "text",
+          "default": "text",
+          "title": "Kind",
+          "type": "string"
+        },
+        "line_start": {
+          "minimum": 1,
+          "title": "Line Start",
+          "type": "integer"
+        },
+        "line_end": {
+          "minimum": 1,
+          "title": "Line End",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "line_start",
+        "line_end"
+      ],
+      "title": "TextLocator",
+      "type": "object"
+    },
+    "TextValue": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "text",
+          "default": "text",
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "title": "TextValue",
+      "type": "object"
+    },
+    "WordCellLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "word_cell",
+          "default": "word_cell",
+          "title": "Kind",
+          "type": "string"
+        },
+        "table": {
+          "minimum": 1,
+          "title": "Table",
+          "type": "integer"
+        },
+        "row": {
+          "minimum": 1,
+          "title": "Row",
+          "type": "integer"
+        },
+        "column": {
+          "minimum": 1,
+          "title": "Column",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "table",
+        "row",
+        "column"
+      ],
+      "title": "WordCellLocator",
+      "type": "object"
+    },
+    "WordParagraphLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1.0",
+          "default": "0.1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "kind": {
+          "const": "word_paragraph",
+          "default": "word_paragraph",
+          "title": "Kind",
+          "type": "string"
+        },
+        "paragraph": {
+          "minimum": 1,
+          "title": "Paragraph",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "paragraph"
+      ],
+      "title": "WordParagraphLocator",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0",
+      "default": "0.1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "dataset_version": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Dataset Version",
+      "type": "string"
+    },
+    "expected_form": {
+      "$ref": "#/$defs/FormSchema"
+    },
+    "expected_fields": {
+      "items": {
+        "$ref": "#/$defs/ExpectedField"
+      },
+      "minItems": 1,
+      "title": "Expected Fields",
+      "type": "array"
+    },
+    "annotation_provenance": {
+      "$ref": "#/$defs/AnnotationProvenance"
+    }
+  },
+  "required": [
+    "task_id",
+    "dataset_version",
+    "expected_form",
+    "expected_fields",
+    "annotation_provenance"
+  ],
+  "title": "GroundTruth",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:smartfill:0.1.0:GroundTruth"
+}

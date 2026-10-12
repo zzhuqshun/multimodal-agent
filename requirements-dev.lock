@@ -1,0 +1,15 @@
+annotated-types==0.8.0
+attrs==26.1.0
+iniconfig==2.3.1
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+packaging==26.3
+pluggy==1.6.0
+pydantic==2.14.1
+pydantic_core==2.50.1
+Pygments==2.21.0
+pytest==9.1.1
+referencing==0.37.0
+rpds-py==2026.9.1
+typing-inspection==0.4.4
+typing_extensions==4.16.0

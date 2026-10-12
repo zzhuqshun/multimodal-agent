@@ -1,0 +1,5 @@
+Name
+Passport number
+Departure date
+Return date
+Trip days

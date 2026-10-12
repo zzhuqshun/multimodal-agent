@@ -1,0 +1,771 @@
+{
+  "schema_version": "0.1.0",
+  "task_id": "EXAMPLE-normal",
+  "run_id": "fixture-normal",
+  "task_input": {
+    "schema_version": "0.1.0",
+    "task_id": "EXAMPLE-normal",
+    "description": "Handcrafted contract fixture; no OCR or model run.",
+    "target_document_id": "form",
+    "documents": [
+      {
+        "schema_version": "0.1.0",
+        "document_id": "form",
+        "role": "target_form",
+        "media_type": "text/plain",
+        "relative_path": "documents/form.txt",
+        "sha256": "2c802016ad7f79e8799988773f90d3648e30923e7f2ed9f3d7f1e019296d2cc5",
+        "synthetic": true,
+        "document_type": "form"
+      },
+      {
+        "schema_version": "0.1.0",
+        "document_id": "passport",
+        "role": "reference",
+        "media_type": "text/plain",
+        "relative_path": "documents/passport.txt",
+        "sha256": "9a0f15a1fe4324ae137b293e4cf8b8194324f09eba6101f2a3bbec79a0ba221a",
+        "synthetic": true,
+        "document_type": "passport"
+      },
+      {
+        "schema_version": "0.1.0",
+        "document_id": "invitation",
+        "role": "reference",
+        "media_type": "text/plain",
+        "relative_path": "documents/invitation.txt",
+        "sha256": "b1af6f51bca74accbd5395ea50c46819d1d6eecf21aa547bec68a7778fc74ce7",
+        "synthetic": true,
+        "document_type": "invitation"
+      }
+    ],
+    "ruleset_id": "simulated-travel",
+    "ruleset_version": "1",
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "source-agreement",
+        "version": "1",
+        "kind": "consistency",
+        "description": "Simulated rule: incompatible values require human confirmation."
+      },
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "trip-days",
+        "version": "1",
+        "kind": "date_days_inclusive",
+        "description": "Simulated rule: count both departure and return dates."
+      }
+    ],
+    "as_of_date": "2026-10-12"
+  },
+  "form_schema": {
+    "schema_version": "0.1.0",
+    "form_id": "handcrafted-form",
+    "target_document_id": "form",
+    "fields": [
+      {
+        "schema_version": "0.1.0",
+        "field_id": "name",
+        "label": "Name",
+        "value_type": "text",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 1,
+          "line_end": 1
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "source-agreement"
+        ]
+      },
+      {
+        "schema_version": "0.1.0",
+        "field_id": "passport",
+        "label": "Passport number",
+        "value_type": "text",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 2,
+          "line_end": 2
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "source-agreement"
+        ]
+      },
+      {
+        "schema_version": "0.1.0",
+        "field_id": "departure",
+        "label": "Departure date",
+        "value_type": "date",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 3,
+          "line_end": 3
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "source-agreement"
+        ]
+      },
+      {
+        "schema_version": "0.1.0",
+        "field_id": "return",
+        "label": "Return date",
+        "value_type": "date",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 4,
+          "line_end": 4
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "source-agreement"
+        ]
+      },
+      {
+        "schema_version": "0.1.0",
+        "field_id": "days",
+        "label": "Trip days",
+        "value_type": "integer",
+        "required": true,
+        "target_locator": {
+          "schema_version": "0.1.0",
+          "kind": "text",
+          "line_start": 5,
+          "line_end": 5
+        },
+        "semantic_key": null,
+        "group_id": null,
+        "row_id": null,
+        "required_when": null,
+        "rule_ids": [
+          "trip-days"
+        ]
+      }
+    ],
+    "groups": []
+  },
+  "parsed_documents": [
+    {
+      "schema_version": "0.1.0",
+      "document_id": "form",
+      "parser_name": "handcrafted-line-fixture",
+      "parser_version": "1",
+      "segments": [
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-1",
+          "text": "Name",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 1,
+            "line_end": 1
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-2",
+          "text": "Passport number",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 2,
+            "line_end": 2
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-3",
+          "text": "Departure date",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 3,
+            "line_end": 3
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-4",
+          "text": "Return date",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 4,
+            "line_end": 4
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-5",
+          "text": "Trip days",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 5,
+            "line_end": 5
+          }
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1.0",
+      "document_id": "passport",
+      "parser_name": "handcrafted-line-fixture",
+      "parser_version": "1",
+      "segments": [
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-1",
+          "text": "SIMULATED PASSPORT - NOT A REAL ID",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 1,
+            "line_end": 1
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-2",
+          "text": "Name: Lin Qiao",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 2,
+            "line_end": 2
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-3",
+          "text": "Passport: P00001234",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 3,
+            "line_end": 3
+          }
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1.0",
+      "document_id": "invitation",
+      "parser_name": "handcrafted-line-fixture",
+      "parser_version": "1",
+      "segments": [
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-1",
+          "text": "SIMULATED INVITATION",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 1,
+            "line_end": 1
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-2",
+          "text": "Name: Lin Qiao",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 2,
+            "line_end": 2
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-3",
+          "text": "Passport: P00001234",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 3,
+            "line_end": 3
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-4",
+          "text": "Departure: 2026-11-03",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 4,
+            "line_end": 4
+          }
+        },
+        {
+          "schema_version": "0.1.0",
+          "segment_id": "line-5",
+          "text": "Return: 2026-11-07",
+          "locator": {
+            "schema_version": "0.1.0",
+            "kind": "text",
+            "line_start": 5,
+            "line_end": 5
+          }
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "schema_version": "0.1.0",
+      "fact_id": "f-name-passport",
+      "entity_id": "person-1",
+      "predicate": "name",
+      "raw_value": "Lin Qiao",
+      "normalized_value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "Lin Qiao"
+      },
+      "evidence_ids": [
+        "e-name-passport"
+      ]
+    },
+    {
+      "schema_version": "0.1.0",
+      "fact_id": "f-name-invitation",
+      "entity_id": "person-1",
+      "predicate": "name",
+      "raw_value": "Lin Qiao",
+      "normalized_value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "Lin Qiao"
+      },
+      "evidence_ids": [
+        "e-name-invitation"
+      ]
+    },
+    {
+      "schema_version": "0.1.0",
+      "fact_id": "f-passport-passport",
+      "entity_id": "person-1",
+      "predicate": "passport",
+      "raw_value": "P00001234",
+      "normalized_value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "P00001234"
+      },
+      "evidence_ids": [
+        "e-passport-passport"
+      ]
+    },
+    {
+      "schema_version": "0.1.0",
+      "fact_id": "f-passport-invitation",
+      "entity_id": "person-1",
+      "predicate": "passport",
+      "raw_value": "P00001234",
+      "normalized_value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "P00001234"
+      },
+      "evidence_ids": [
+        "e-passport-invitation"
+      ]
+    },
+    {
+      "schema_version": "0.1.0",
+      "fact_id": "f-departure-invitation",
+      "entity_id": "person-1",
+      "predicate": "departure",
+      "raw_value": "2026-11-03",
+      "normalized_value": {
+        "schema_version": "0.1.0",
+        "kind": "date",
+        "value": "2026-11-03"
+      },
+      "evidence_ids": [
+        "e-departure-invitation"
+      ]
+    },
+    {
+      "schema_version": "0.1.0",
+      "fact_id": "f-return-invitation",
+      "entity_id": "person-1",
+      "predicate": "return",
+      "raw_value": "2026-11-07",
+      "normalized_value": {
+        "schema_version": "0.1.0",
+        "kind": "date",
+        "value": "2026-11-07"
+      },
+      "evidence_ids": [
+        "e-return-invitation"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "schema_version": "0.1.0",
+      "evidence_id": "e-name-passport",
+      "document_id": "passport",
+      "segment_id": "line-2",
+      "locator": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "quote": "Lin Qiao",
+      "start": 6,
+      "end": 14,
+      "origin": "manual"
+    },
+    {
+      "schema_version": "0.1.0",
+      "evidence_id": "e-name-invitation",
+      "document_id": "invitation",
+      "segment_id": "line-2",
+      "locator": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "line_start": 2,
+        "line_end": 2
+      },
+      "quote": "Lin Qiao",
+      "start": 6,
+      "end": 14,
+      "origin": "manual"
+    },
+    {
+      "schema_version": "0.1.0",
+      "evidence_id": "e-passport-passport",
+      "document_id": "passport",
+      "segment_id": "line-3",
+      "locator": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "quote": "P00001234",
+      "start": 10,
+      "end": 19,
+      "origin": "manual"
+    },
+    {
+      "schema_version": "0.1.0",
+      "evidence_id": "e-passport-invitation",
+      "document_id": "invitation",
+      "segment_id": "line-3",
+      "locator": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "quote": "P00001234",
+      "start": 10,
+      "end": 19,
+      "origin": "manual"
+    },
+    {
+      "schema_version": "0.1.0",
+      "evidence_id": "e-departure-invitation",
+      "document_id": "invitation",
+      "segment_id": "line-4",
+      "locator": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "line_start": 4,
+        "line_end": 4
+      },
+      "quote": "2026-11-03",
+      "start": 11,
+      "end": 21,
+      "origin": "manual"
+    },
+    {
+      "schema_version": "0.1.0",
+      "evidence_id": "e-return-invitation",
+      "document_id": "invitation",
+      "segment_id": "line-5",
+      "locator": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "quote": "2026-11-07",
+      "start": 8,
+      "end": 18,
+      "origin": "manual"
+    }
+  ],
+  "candidates": [
+    {
+      "schema_version": "0.1.0",
+      "candidate_id": "c-name-passport",
+      "field_id": "name",
+      "fact_ids": [
+        "f-name-passport"
+      ],
+      "value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "Lin Qiao"
+      },
+      "evidence_ids": [
+        "e-name-passport"
+      ],
+      "method": "manual",
+      "score": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "candidate_id": "c-name-invitation",
+      "field_id": "name",
+      "fact_ids": [
+        "f-name-invitation"
+      ],
+      "value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "Lin Qiao"
+      },
+      "evidence_ids": [
+        "e-name-invitation"
+      ],
+      "method": "manual",
+      "score": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "candidate_id": "c-passport-passport",
+      "field_id": "passport",
+      "fact_ids": [
+        "f-passport-passport"
+      ],
+      "value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "P00001234"
+      },
+      "evidence_ids": [
+        "e-passport-passport"
+      ],
+      "method": "manual",
+      "score": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "candidate_id": "c-passport-invitation",
+      "field_id": "passport",
+      "fact_ids": [
+        "f-passport-invitation"
+      ],
+      "value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "P00001234"
+      },
+      "evidence_ids": [
+        "e-passport-invitation"
+      ],
+      "method": "manual",
+      "score": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "candidate_id": "c-departure-invitation",
+      "field_id": "departure",
+      "fact_ids": [
+        "f-departure-invitation"
+      ],
+      "value": {
+        "schema_version": "0.1.0",
+        "kind": "date",
+        "value": "2026-11-03"
+      },
+      "evidence_ids": [
+        "e-departure-invitation"
+      ],
+      "method": "manual",
+      "score": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "candidate_id": "c-return-invitation",
+      "field_id": "return",
+      "fact_ids": [
+        "f-return-invitation"
+      ],
+      "value": {
+        "schema_version": "0.1.0",
+        "kind": "date",
+        "value": "2026-11-07"
+      },
+      "evidence_ids": [
+        "e-return-invitation"
+      ],
+      "method": "manual",
+      "score": null
+    }
+  ],
+  "fields": [
+    {
+      "schema_version": "0.1.0",
+      "field_id": "name",
+      "candidate_ids": [
+        "c-name-passport",
+        "c-name-invitation"
+      ],
+      "selected_candidate_id": "c-name-passport",
+      "suggested_value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "Lin Qiao"
+      },
+      "status": "verified",
+      "evidence_ids": [
+        "e-name-passport",
+        "e-name-invitation"
+      ],
+      "issue_ids": [],
+      "derivation": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "field_id": "passport",
+      "candidate_ids": [
+        "c-passport-passport",
+        "c-passport-invitation"
+      ],
+      "selected_candidate_id": "c-passport-passport",
+      "suggested_value": {
+        "schema_version": "0.1.0",
+        "kind": "text",
+        "value": "P00001234"
+      },
+      "status": "verified",
+      "evidence_ids": [
+        "e-passport-passport",
+        "e-passport-invitation"
+      ],
+      "issue_ids": [],
+      "derivation": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "field_id": "departure",
+      "candidate_ids": [
+        "c-departure-invitation"
+      ],
+      "selected_candidate_id": "c-departure-invitation",
+      "suggested_value": {
+        "schema_version": "0.1.0",
+        "kind": "date",
+        "value": "2026-11-03"
+      },
+      "status": "verified",
+      "evidence_ids": [
+        "e-departure-invitation"
+      ],
+      "issue_ids": [],
+      "derivation": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "field_id": "return",
+      "candidate_ids": [
+        "c-return-invitation"
+      ],
+      "selected_candidate_id": "c-return-invitation",
+      "suggested_value": {
+        "schema_version": "0.1.0",
+        "kind": "date",
+        "value": "2026-11-07"
+      },
+      "status": "verified",
+      "evidence_ids": [
+        "e-return-invitation"
+      ],
+      "issue_ids": [],
+      "derivation": null
+    },
+    {
+      "schema_version": "0.1.0",
+      "field_id": "days",
+      "candidate_ids": [],
+      "selected_candidate_id": null,
+      "suggested_value": {
+        "schema_version": "0.1.0",
+        "kind": "integer",
+        "value": 5
+      },
+      "status": "verified",
+      "evidence_ids": [
+        "e-departure-invitation",
+        "e-return-invitation"
+      ],
+      "issue_ids": [],
+      "derivation": {
+        "schema_version": "0.1.0",
+        "rule_id": "trip-days",
+        "rule_version": "1",
+        "input_fact_ids": [
+          "f-departure-invitation",
+          "f-return-invitation"
+        ],
+        "output": {
+          "schema_version": "0.1.0",
+          "kind": "integer",
+          "value": 5
+        },
+        "unit": "days"
+      }
+    }
+  ],
+  "issues": [],
+  "review_requests": [],
+  "task_status": "completed",
+  "errors": [],
+  "timing": {
+    "schema_version": "0.1.0",
+    "total_ms": 0.0,
+    "stages_ms": {}
+  },
+  "run_metadata": {
+    "schema_version": "0.1.0",
+    "implementation_version": "0.1.0",
+    "mode": "handcrafted_fixture",
+    "model_id": null,
+    "prompt_version": null,
+    "input_tokens": null,
+    "output_tokens": null
+  }
+}
