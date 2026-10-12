@@ -4,7 +4,7 @@
 
 - 目标：未知表单理解、多材料关联和带来源证据的可信填报；首期使用虚构出访申请。
 - 主工作目录：WSL Ubuntu-24.04-D，user773，/home/user773/multimodal_agent。后续编辑、运行、数据准备和Git操作均在WSL完成。
-- Windows smartfill为迁移来源与历史存档；以明文内容在Linux重建，未直接复制加密文件。
+- Windows smartfill曾为迁移来源；已按用户要求于2026-10-12删除，后续仅使用WSL主目录。迁移以明文内容在Linux重建，未直接复制加密文件。
 - 权威来源：用户确认的飞书总体方案https://zcnna0f3aim6.feishu.cn/wiki/NNJWwoDnliiHy8kSHhicvUWfnVg ，机器人读取revision 10；正文在docs/overall-plan.md，交接在docs/handoff.md。
 - 13页方案PDF副本在docs/references/overall-plan.pdf，两张表在docs/assets；截断文字与链接目标未恢复。
 - GitHub目标：https://github.com/zzhuqshun/multimodal-agent.git。
@@ -21,6 +21,13 @@
 - CLI只校验人工构造的结果，不自动理解或填报表单。PDF/图片/Excel/Word定位类型已定义，原文件内容核验目前只支持UTF-8文本。
 
 ## 工作记录
+
+### 2026-10-12（删除Windows旧项目）
+
+- 用户明确要求删除C:/Users/xd04333/Documents/ChatGPT/Agent框架/smartfill；操作前核验绝对路径及普通目录属性，删除范围仅限该项目。
+- 回收站接口失败后，改用PowerShell原生删除；旧pytest缓存受权限限制，沙箱外重试成功，已确认旧目录不存在。本次为直接删除，未成功移入回收站。
+- WSL主目录、核心源码、两个样例、方案PDF和独立Python环境仍存在；清理没有修改业务代码。此前63项测试通过，本轮未重复运行测试。
+
 
 ### 2026-10-12（GitHub首版上传完成）
 
