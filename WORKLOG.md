@@ -11,16 +11,31 @@
 
 ## 当前状态
 
-- 0.1.0第一步已实现：Pydantic数据契约、跨对象引用/证据/状态/计算链校验、独立GroundTruth、文本原文件核验、JSON Schema导出和CLI。
+- 3模板/15组模拟开发数据已生成于data/dev/v0.1.0：A纵向PDF、B分组Excel、C横向PDF含两个访问项目；6正常、5冲突、4缺失，总计175字段、143文件。
+- 每组含可见input.json、documents及分离的ground_truth.json、annotations.json；manifest登记种子20261012、版本、模板族、实体、规则、异常与文件哈希。没有预测result.json、模型调用或独立人工核验。
+- 数据审计与新进程完整字节复现均通过；结果在docs/dev-dataset-audit.json，操作与限制在docs/dev-dataset.md。生成的数据按原约定忽略Git，源码可重新生成；输出已存在时拒绝覆盖。
+
+- 0.1.0数据契约已实现：Pydantic数据契约、跨对象引用/证据/状态/计算链校验、独立GroundTruth、文本原文件核验、JSON Schema导出和CLI。
 - data/examples/normal与conflict均为手工模拟样例，各含原始材料、输入、预构造结果和独立答案；正常样例5字段verified，冲突样例护照号码null并请求确认。
-- WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；63项测试通过。
+- WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；当前86项测试通过（63项契约、23项开发数据检查）。
 - data/dev、validation、holdout、external已建立，内容默认忽略Git；data/examples内虚构样例可提交。运行产物使用runs/，权重不放项目仓库。
 - 已初始化独立Git仓库及codex/contracts-baseline分支，origin指向用户仓库。通过现有Windows网关代理已连通GitHub，远端没有分支引用；已有SSH身份验证为zzhuqshun。首个实现提交5800bab已推送至origin/codex/contracts-baseline并建立跟踪。
 - WSL可访问PyPI；Windows系统代理为localhost，WSL启动报告NAT模式未镜像该代理；仅为本项目设置Git代理和SSH推送方式，未更改Windows/WSL系统网络配置。
 - 远端配置示例在.env.example，部署计划在docs/runtime-and-server.md；没有模型适配器、SSH连接、模型安装或服务调用。
-- CLI只校验人工构造的结果，不自动理解或填报表单。PDF/图片/Excel/Word定位类型已定义，原文件内容核验目前只支持UTF-8文本。
+- CLI可生成及审计开发数据，validate命令校验已有结果；没有自动理解或填报表单。通用证据核验支持UTF-8文本，开发数据审计额外检查自建PDF/Excel的空白字段区域；通用解析器和OCR尚未实现。
 
 ## 工作记录
+
+### 2026-10-12（3模板15组开发数据生成与审计）
+
+- 新增smartfill/dataset.py、dataset_audit.py和tests/test_dataset.py；CLI新增generate-dev、audit-dataset，生成器先在临时目录建立并审计后交付，拒绝覆盖已有输出。
+- 生成A.pdf、B.xlsx、C.pdf三个空白模板和DEV-001至DEV-015；参考材料为带SIMULATED标记的UTF-8文本，覆盖姓名显式对应、日期格式与干扰日期、访问行关联、来源冲突、签证区间冲突、缺失和天数计算。
+- 标准答案从注入后的可见材料构造，独立审计器重新读取实际文件；核验哈希、引用、归一化值、候选保留、计算输入、目标位置及目录越界，隐藏注入前值不用于填写。
+- WSL .venv新增ReportLab、openpyxl、pdfplumber及必要依赖；pyproject.toml声明dataset依赖组，requirements-dev.lock固定实际版本。使用WSL现有中文TTF，修正其缺少拉丁字形的问题。
+- PDF经Poppler渲染并目视检查；Excel实际回读和OOXML版面预览检查通过，修正标题行高；环境没有Artifact Tool运行库或原生Excel/LibreOffice渲染器，未声称原生渲染验证。
+- 86项测试通过，正式数据审计通过；相同种子在新的Linux进程重生成143个文件，全部字节哈希相同。预期状态为163 verified、5 conflict、1 review_required、6 missing；这是答案分布，不是模型成绩。
+- 更新README.md、data/README.md、接口说明、新增docs/dev-dataset.md及审计报告；没有下载公开数据、连接模型服务器或调用模型，没有将模拟任务标记为独立人工核验。
+
 
 ### 2026-10-12（删除Windows旧项目）
 
@@ -88,17 +103,18 @@
 - 异常字段最终建议为null并带对应动作；verified需要可追溯候选或计算链，只表示当前检查通过，不能证明OCR/语义正确。
 - 先契约与标准答案，再3模板/15组开发数据、规则基线与评测、Qwen直接基线及OCR；LangGraph、Skills、多Agent、数据库、MCP和GUI待基线可评测后考虑。
 - 框架与数据在WSL；模型权重与服务计划在服务器，通过OpenAI兼容HTTP接口调用；当前仅预留配置约定。
+- 开发数据生成器固定dev用途；相同种子、版本、字体和依赖下可复现。改变种子不产生新的模板族/独立留出实体。
 - 15组仅为开发里程碑；评测按模板族和实体隔离。总体方案300–500组完整任务目标保留，100–150组异常为其子集，人工核验可从留出集抽取。
 - 不提交密钥、真实业务文件、权重、外部数据下载或运行产物；不强制覆盖远端历史。
 
 ## 待办与风险
 
 - GitHub连接已恢复，首个实现提交已上传；WSL网关IP变化后需刷新本仓库代理与SSH连接参数，详见README。
-- 下一阶段：3模板/15组开发任务生成器、manifest与独立答案校验，再实现规则基线和具有明确分母的评测。
+- 下一阶段：实际文件解析入口、规则填报基线，以及按字段位置/结构对齐、有明确分子分母的独立评测；基线不得读取gold、annotations或manifest异常标签。
 - PDF/Excel/Word解析、OCR、归一化、实体关联及其他业务规则未实现，引用一致性不能替代能力测试。
 - 服务器SSH主机、端口、用户名、登录方式和可用目录待提供；交接所述4×A100未核验；具体Qwen权重和vLLM版本部署前查官方来源。
 - 公开数据下载前补查截断许可列与官方链接；方案PDF未保留链接目标。
-- 两个手工样例不属于15组开发集或独立人工核验集，不用于准确率或性能报告。
+- 两个手工样例独立于15组开发集；开发集仍为受控模板和单人员文本材料，所有human_reviewed=false，不用于未知模板泛化或真实业务结论。需要后续独立人工核验和隔离模板族/实体的留出集。
 
 ## 验证方式
 
@@ -106,13 +122,14 @@
 
 ~~~bash
 .venv/bin/python -m pytest
+.venv/bin/python -m smartfill audit-dataset data/dev/v0.1.0
 .venv/bin/python -m smartfill validate data/examples/normal
 .venv/bin/python -m smartfill validate data/examples/conflict
 .venv/bin/python -m smartfill export-schemas schemas
 git status --short
 ~~~
 
-- 63项测试覆盖往返序列化、引用/类型/状态/计算约束、独立答案、原文件哈希/引用核验及Schema确定性导出。
+- 86项测试包含原63项契约检查和新增23项数据检查；契约测试覆盖往返序列化、引用/类型/状态/计算约束、独立答案、原文件哈希/引用核验及Schema确定性导出。
 - 两个CLI样例通过；人工夹具timing=0不作为耗时测量。
 - Linux新进程检查Python语法、JSON解析与文件头，拒绝%TSD-Header；PDF与PNG以明文字节重建。
 - 历史来源核验：机器人读取revision 10；13页PDF已渲染查看第7–10页并查看第8、10页两表原图，没有线上写入。

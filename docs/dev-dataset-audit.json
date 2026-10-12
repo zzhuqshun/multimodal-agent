@@ -1,0 +1,28 @@
+{
+  "tasks": 15,
+  "templates": 3,
+  "categories": {
+    "normal": 6,
+    "conflict": 5,
+    "missing": 4
+  },
+  "fields": 175,
+  "expected_field_statuses": {
+    "verified": 163,
+    "conflict": 5,
+    "review_required": 1,
+    "missing": 6
+  },
+  "artifact_audit": "passed",
+  "human_reviewed_tasks": 0,
+  "model_runs": 0,
+  "date": "2026-10-12",
+  "dataset_version": "0.1.0",
+  "seed": 20261012,
+  "manifest_sha256": "9496a751c7dededb4b3d5dcffe6502242be41ec47b2f5bb6036083940a7bd845",
+  "fresh_process_byte_reproducibility": "passed",
+  "files": 143,
+  "pdf_render_review": "A and C visually inspected",
+  "xlsx_review": "read-back and OOXML preview inspected; no native Excel renderer",
+  "tests_passed": 86
+}

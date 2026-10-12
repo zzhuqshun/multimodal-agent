@@ -45,10 +45,22 @@ def main() -> int:
     validate.add_argument("directory", type=Path)
     export = subcommands.add_parser("export-schemas", help="export Draft 2020-12 schemas")
     export.add_argument("directory", type=Path)
+    generate = subcommands.add_parser("generate-dev", help="generate 15 fictional PDF/Excel development tasks")
+    generate.add_argument("--output", type=Path, default=Path("data/dev/v0.1.0"))
+    generate.add_argument("--seed", type=int, default=20261012)
+    generate.add_argument("--font", type=Path, default=Path("/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf"))
+    audit = subcommands.add_parser("audit-dataset", help="read back and audit physical files and independent gold")
+    audit.add_argument("directory", type=Path)
     args = parser.parse_args()
     try:
         if args.command == "validate":
             print(json.dumps(validate_example(args.directory), ensure_ascii=True, indent=2))
+        elif args.command == "generate-dev":
+            from .dataset import generate_dataset
+            print(json.dumps(generate_dataset(args.output, args.seed, args.font), ensure_ascii=False, indent=2))
+        elif args.command == "audit-dataset":
+            from .dataset_audit import audit_dataset
+            print(json.dumps(audit_dataset(args.directory), ensure_ascii=False, indent=2))
         else:
             export_schemas(args.directory)
             print("Exported TaskInput, FillingResult and GroundTruth schemas.")
