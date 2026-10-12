@@ -15,12 +15,18 @@
 - data/examples/normal与conflict均为手工模拟样例，各含原始材料、输入、预构造结果和独立答案；正常样例5字段verified，冲突样例护照号码null并请求确认。
 - WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；63项测试通过。
 - data/dev、validation、holdout、external已建立，内容默认忽略Git；data/examples内虚构样例可提交。运行产物使用runs/，权重不放项目仓库。
-- 已初始化独立Git仓库及codex/contracts-baseline分支，origin指向用户仓库。通过现有Windows网关代理已连通GitHub，远端没有分支引用；已有SSH身份验证为zzhuqshun。当前准备首个提交与上传。
+- 已初始化独立Git仓库及codex/contracts-baseline分支，origin指向用户仓库。通过现有Windows网关代理已连通GitHub，远端没有分支引用；已有SSH身份验证为zzhuqshun。首个实现提交5800bab已推送至origin/codex/contracts-baseline并建立跟踪。
 - WSL可访问PyPI；Windows系统代理为localhost，WSL启动报告NAT模式未镜像该代理；仅为本项目设置Git代理和SSH推送方式，未更改Windows/WSL系统网络配置。
 - 远端配置示例在.env.example，部署计划在docs/runtime-and-server.md；没有模型适配器、SSH连接、模型安装或服务调用。
 - CLI只校验人工构造的结果，不自动理解或填报表单。PDF/图片/Excel/Word定位类型已定义，原文件内容核验目前只支持UTF-8文本。
 
 ## 工作记录
+
+### 2026-10-12（GitHub首版上传完成）
+
+- 从WSL创建实现提交5800bab，使用用户指定署名；成功推送至zzhuqshun/multimodal-agent的codex/contracts-baseline分支并设置跟踪。
+- 提交42个项目文件；虚拟环境、实际数据下载、运行产物、私钥和本机连接配置均未提交。
+- 推送后git status --short为空，测试结果保持63项通过；本次仅补记上传事实，不改变代码。
 
 ### 2026-10-12（GitHub连接恢复）
 
@@ -80,7 +86,7 @@
 
 ## 待办与风险
 
-- GitHub远端为空且SSH身份已核验，用户指定提交署名已配置于本仓库；首个提交和上传待本轮最后执行。
+- GitHub连接已恢复，首个实现提交已上传；WSL网关IP变化后需刷新本仓库代理与SSH连接参数，详见README。
 - 下一阶段：3模板/15组开发任务生成器、manifest与独立答案校验，再实现规则基线和具有明确分母的评测。
 - PDF/Excel/Word解析、OCR、归一化、实体关联及其他业务规则未实现，引用一致性不能替代能力测试。
 - 服务器SSH主机、端口、用户名、登录方式和可用目录待提供；交接所述4×A100未核验；具体Qwen权重和vLLM版本部署前查官方来源。
