@@ -12,19 +12,32 @@
 ## 当前状态
 
 - 3模板/15组模拟开发数据已生成于data/dev/v0.1.0：A纵向PDF、B分组Excel、C横向PDF含两个访问项目；6正常、5冲突、4缺失，总计175字段、143文件。
-- 每组含可见input.json、documents及分离的ground_truth.json、annotations.json；manifest登记种子20261012、版本、模板族、实体、规则、异常与文件哈希。预测独立保存在runs/，原数据集内没有result.json；没有模型调用或独立人工核验。
+- 每组含可见input.json、documents及分离的ground_truth.json、annotations.json；manifest登记种子20261012、版本、模板族、实体、规则、异常与文件哈希。预测独立保存在runs/，原数据集内没有result.json；15组尚无Qwen填报运行或独立人工核验；已完成的模型探针不计入任务评测。
 - 数据审计与新进程完整字节复现均通过；结果在docs/dev-dataset-audit.json，操作与限制在docs/dev-dataset.md。生成的数据按原约定忽略Git，源码可重新生成；输出已存在时拒绝覆盖。
 
 - 0.1.0数据契约已实现：Pydantic数据契约、跨对象引用/证据/状态/计算链校验、独立GroundTruth、文本原文件核验、JSON Schema导出和CLI。
 - data/examples/normal与conflict均为手工模拟样例，各含原始材料、输入、预构造结果和独立答案；正常样例5字段verified，冲突样例护照号码null并请求确认。
-- WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；当前100项测试通过（63项契约、23项开发数据检查、14项规则基线与独立评测集成检查）。
+- WSL Python 3.12.3独立.venv已建立，依赖已安装；requirements-dev.lock记录实际版本；当前121项测试通过（原100项、18项模型HTTP检查、3项模型下载保护检查）。
 - data/dev、validation、holdout、external已建立，内容默认忽略Git；data/examples内虚构样例可提交。运行产物使用runs/，权重不放项目仓库。
 - 已初始化独立Git仓库及codex/contracts-baseline分支，origin指向用户仓库并建立跟踪，契约与开发数据实现已发布。通过现有Windows网关代理连通GitHub，已有SSH身份验证为zzhuqshun。
 - WSL可访问PyPI；Windows系统代理为localhost，WSL启动报告NAT模式未镜像该代理；仅为本项目设置Git代理和SSH推送方式，未更改Windows/WSL系统网络配置。
-- 远端配置示例在.env.example，部署计划在docs/runtime-and-server.md；没有模型适配器、SSH连接、模型安装或服务调用。
+- 远端Qwen3.5-9B已部署并运行在用户指定的/data/zhuqianshun_data/server/qwen3.5-9b；Python 3.12.14、vLLM 0.17.1、PyTorch 2.10.0+cu128、Transformers 4.57.6均为该目录独立环境。WSL经SSH本地转发访问127.0.0.1:18000，served ID为smartfill-qwen3.5-9b；真实文字与合成图片两轮探针均通过。配置示例在.env.example，本地.env忽略Git且CLI只读取导出的环境变量；报告在docs/server-connection-report.json。
 - CLI新增fill-rule、run-rule-baseline、evaluate；规则版从实际PDF矩形/Excel空白合并单元格识别字段，读取UTF-8参考文本并生成JSON草稿，先保存全部预测再打开答案。正式运行15题/175字段通过，190候选、13计算链通过，6题completed、9题needs_review、12个请求；详见docs/rule-baseline-report.json和docs/rule-baseline.md。物理证据核验已支持文本、PDF文本区域、Excel单元格；通用任意表单理解、OCR及文件写回尚未实现。
 
 ## 工作记录
+
+### 2026-10-12（服务器独立环境、Qwen部署与WSL连通）
+
+- 用户提供SSH连接信息并要求模型环境尽量集中在指定server目录、避免影响其他工作；通过已有known_hosts严格核验后从WSL登录，凭据仅经匿名管道传递，未写入项目、部署脚本或日志。
+- 只读确认Ubuntu 20.04.6、系统Python 3.8.10、驱动570.133.20及4张A100 80GB；指定目录可写且已有sam3_server，保留既有环境与进程。
+- 在/data/zhuqianshun_data/server/qwen3.5-9b建立独立Python 3.12.14解释器、env、models、cache、tmp、logs、state；安装vLLM 0.17.1和PyTorch 2.10.0+cu128，BF16微型运算及vLLM扩展导入通过。未安装到系统/其他应用环境，未修改驱动或系统网络。
+- 官方Hugging Face直连失败，使用Qwen官方ModelScope来源；适配旧curl和短暂DNS/连接超时后，15个文件共19329314298字节（含4权重分片）全部按固定源修订和SHA-256校验。来源记录在服务器state/model-source.json，精确依赖在state/requirements-server.lock及项目docs/requirements-server.lock。
+- 新增smartfill/model_api.py、check-model CLI和.env.example实际配置说明；标准库HTTP处理模型列表、固定文字探针、超时/状态/响应校验、拒绝重定向及用量null。没有读取任务答案或将业务材料发送给模型。
+- 新增scripts/serve-qwen.sh、install-qwen-environment.sh、download-qwen-model.py源码；处理vLLM旧版不接受CUDA UUID的问题，用数字索引加UUID比对确认GPU 3。运行锁防重复服务与运行中改环境，已验证安装脚本会拒绝修改活动服务环境。
+- 单卡BF16、单并发、8192上下文、仅本机18000端口、CPU线程4、nice=10；通过核验进程身份的pidfd只停止并重启本次新服务，将显存规划从0.45降为0.32。旧进程释放时一次启动保护正确拒绝加载，完全释放后启动成功；没有停止其他应用。
+- WSL建立只监听本机的SSH转发，运行信息在runs/server-runtime，登录信息不进Git。初始和最终配置共4次真实chat请求，文字返回SMARTFILL_OK、96×96纯红图片返回red，两轮通过；实际耗时与token用量在报告中，未作为吞吐或OCR评测。
+- 最终GPU 3快照占用25312MiB、空闲55842MiB，模型目录du约28GiB；从本服务进程白名单环境变量核验主要缓存/临时目录均在模型根目录。共享硬件仍有资源影响，不承诺其他任务性能完全不变。
+- 完整121项测试通过（原100、18项HTTP、3项下载保护）；部署脚本语法检查通过。新增docs/server-connection-report.json、依赖锁，更新README及运行说明；Qwen自动填报/15组任务模型评测、OCR和表单写回尚未实现。
 
 ### 2026-10-12（实际文件规则填报与独立评测）
 
@@ -112,7 +125,7 @@
 - schema_version固定0.1.0；值和定位使用kind判别类型。标准答案独立于预测ID与运行输入；未知字段被拒绝。
 - 异常字段最终建议为null并带对应动作；verified需要可追溯候选或计算链，只表示当前检查通过，不能证明OCR/语义正确。
 - 先契约与标准答案，再3模板/15组开发数据、规则基线与评测、Qwen直接基线及OCR；LangGraph、Skills、多Agent、数据库、MCP和GUI待基线可评测后考虑。
-- 框架与数据在WSL；模型权重与服务计划在服务器，通过OpenAI兼容HTTP接口调用；当前仅预留配置约定。
+- 框架与数据在WSL；模型权重、托管Python、独立依赖、缓存、临时文件及日志集中在服务器授权的qwen3.5-9b子目录，保留已有sam3_server；不修改系统Python/驱动或其他服务。模型仅监听服务器本机，通过SSH转发访问OpenAI兼容HTTP接口。
 - 开发数据生成器固定dev用途；相同种子、版本、字体和依赖下可复现。改变种子不产生新的模板族/独立留出实体。
 - 15组仅为开发里程碑；评测按模板族和实体隔离。总体方案300–500组完整任务目标保留，100–150组异常为其子集，人工核验可从留出集抽取。
 - 不提交密钥、真实业务文件、权重、外部数据下载或运行产物；不强制覆盖远端历史。
@@ -120,9 +133,9 @@
 ## 待办与风险
 
 - GitHub连接已恢复，开发分支已上传；WSL网关IP变化后需刷新本仓库代理与SSH连接参数，详见README。
-- 下一阶段：核验服务器连接/GPU/目录，部署并连通Qwen后运行相同任务，与规则基线比较；后续补独立模板族/实体验证集及人工核验。
+- 下一阶段：实现Qwen填报输入/输出适配，严格隔离答案后运行相同15组任务，与规则基线比较；后续补独立模板族/实体验证集及人工核验。
 - 仅支持受控布局的文本PDF/单工作表Excel及UTF-8参考材料；扫描/旋转PDF、Word、OCR、复杂Excel、多人员消歧及其他业务规则未实现。当前输出JSON草稿，未写回表单；异常跨字段推理证据评分受契约限制，引用一致性不能替代能力测试。
-- 服务器SSH主机、端口、用户名、登录方式和可用目录待提供；交接所述4×A100未核验；具体Qwen权重和vLLM版本部署前查官方来源。
+- 服务器连接已核验，实际4×A100 80GB；GPU 0/2已有任务，当前模型使用GPU 3，单并发/8192上下文/显存规划0.32，快照占用25312MiB。共享资源仍有影响，启动空闲检查不能替代GPU调度；SSH转发断开需重建，未设置系统自启动。模型探针只确认连通与简单视觉输入，不能作为OCR或填报准确率。
 - 公开数据下载前补查截断许可列与官方链接；方案PDF未保留链接目标。
 - 两个手工样例独立于15组开发集；开发集仍为受控模板和单人员文本材料，所有human_reviewed=false，不用于未知模板泛化或真实业务结论。需要后续独立人工核验和隔离模板族/实体的留出集。
 
@@ -137,10 +150,14 @@
 .venv/bin/python -m smartfill validate data/examples/normal
 .venv/bin/python -m smartfill validate data/examples/conflict
 .venv/bin/python -m smartfill export-schemas schemas
+set -a
+source .env
+set +a
+.venv/bin/python -m smartfill check-model
 git status --short
 ~~~
 
-- 当前100项测试包含63项契约检查、23项数据检查和14项规则填报/独立评测集成检查；契约测试覆盖往返序列化、引用/类型/状态/计算约束、独立答案、原文件哈希/引用核验及Schema确定性导出。
+- 当前121项测试包含原100项契约/开发数据/规则评测检查、18项模型HTTP检查及3项下载保护检查；契约测试覆盖往返序列化、引用/类型/状态/计算约束、独立答案、原文件哈希/引用核验及Schema确定性导出。
 - 两个CLI样例通过；人工夹具timing=0不作为耗时测量。
 - Linux新进程检查Python语法、JSON解析与文件头，拒绝%TSD-Header；PDF与PNG以明文字节重建。
 - 历史来源核验：机器人读取revision 10；13页PDF已渲染查看第7–10页并查看第8、10页两表原图，没有线上写入。

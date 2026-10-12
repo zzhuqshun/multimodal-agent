@@ -60,9 +60,13 @@ def main() -> int:
     evaluate = subcommands.add_parser("evaluate", help="evaluate a saved prediction against independent gold")
     evaluate.add_argument("directory", type=Path)
     evaluate.add_argument("result", type=Path)
+    subcommands.add_parser("check-model", help="check configured server model and one fixed text prompt")
     args = parser.parse_args()
     try:
-        if args.command == "validate":
+        if args.command == "check-model":
+            from .model_api import ModelConfig, check_model
+            print(json.dumps(check_model(ModelConfig.from_env()), ensure_ascii=False, indent=2))
+        elif args.command == "validate":
             print(json.dumps(validate_example(args.directory), ensure_ascii=True, indent=2))
         elif args.command == "generate-dev":
             from .dataset import generate_dataset

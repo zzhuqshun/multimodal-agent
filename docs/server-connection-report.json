@@ -1,0 +1,139 @@
+{
+  "verified_at": "2026-10-12T13:59:20.017287+08:00",
+  "status": "passed",
+  "scope": "isolated server deployment and WSL text/vision connectivity; not form filling accuracy",
+  "runtime": {
+    "server_os": "Ubuntu 20.04.6",
+    "system_python": "3.8.10 (unchanged)",
+    "isolated_python": "3.12.14",
+    "vllm": "0.17.1",
+    "torch": "2.10.0+cu128",
+    "torch_cuda": "12.8",
+    "transformers": "4.57.6",
+    "gpu_count": 4
+  },
+  "model": {
+    "id": "Qwen/Qwen3.5-9B",
+    "served_id": "smartfill-qwen3.5-9b",
+    "source": "https://modelscope.cn/models/Qwen/Qwen3.5-9B",
+    "license_source": "https://huggingface.co/Qwen/Qwen3.5-9B",
+    "verified_files": 15,
+    "verified_file_bytes": 19329314298,
+    "source_revision_policy": "per-file immutable revision and SHA-256 recorded in server state/model-source.json"
+  },
+  "configuration": {
+    "gpu_memory_utilization": 0.32,
+    "max_model_len": 8192,
+    "max_num_seqs": 1,
+    "tensor_parallel_size": 1,
+    "dtype": "bfloat16",
+    "enforce_eager": true,
+    "image_limit": 1,
+    "video_limit": 0,
+    "nice": 10,
+    "thinking_enabled_in_probes": false
+  },
+  "deployment": {
+    "model_root": "/data/zhuqianshun_data/server/qwen3.5-9b",
+    "gpu_index": 3,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "driver_version": "570.133.20",
+    "gpu_memory_mib": {
+      "total": 81920,
+      "used": 25312,
+      "free": 55842
+    },
+    "weights_verified": true,
+    "files": 15,
+    "file_bytes": 19329314298,
+    "cache_paths_within_root": true,
+    "runtime_paths": {
+      "XDG_CACHE_HOME": "/data/zhuqianshun_data/server/qwen3.5-9b/cache",
+      "XDG_CONFIG_HOME": "/data/zhuqianshun_data/server/qwen3.5-9b/config",
+      "VLLM_CACHE_ROOT": "/data/zhuqianshun_data/server/qwen3.5-9b/cache/vllm",
+      "VLLM_CONFIG_ROOT": "/data/zhuqianshun_data/server/qwen3.5-9b/config/vllm",
+      "HF_HOME": "/data/zhuqianshun_data/server/qwen3.5-9b/cache/huggingface",
+      "TMPDIR": "/data/zhuqianshun_data/server/qwen3.5-9b/tmp",
+      "TORCHINDUCTOR_CACHE_DIR": "/data/zhuqianshun_data/server/qwen3.5-9b/cache/torchinductor",
+      "TRITON_CACHE_DIR": "/data/zhuqianshun_data/server/qwen3.5-9b/cache/triton",
+      "CUDA_CACHE_PATH": "/data/zhuqianshun_data/server/qwen3.5-9b/cache/cuda",
+      "NUMBA_CACHE_DIR": "/data/zhuqianshun_data/server/qwen3.5-9b/cache/numba"
+    },
+    "service_environment": {
+      "OMP_NUM_THREADS": "4",
+      "MKL_NUM_THREADS": "4"
+    },
+    "listen_address": "127.0.0.1:18000",
+    "server_disk": "28G"
+  },
+  "checks": {
+    "initial_text": {
+      "status": "passed",
+      "model_id": "smartfill-qwen3.5-9b",
+      "response_model": "smartfill-qwen3.5-9b",
+      "text_response": "SMARTFILL_OK",
+      "probe_match": true,
+      "usage": {
+        "prompt_tokens": 20,
+        "completion_tokens": 5,
+        "total_tokens": 25
+      },
+      "elapsed_ms": 63055.98425900007,
+      "scope": "model registration and text connectivity only; no filling or vision evaluation"
+    },
+    "initial_vision": {
+      "status": "passed",
+      "model_id": "smartfill-qwen3.5-9b",
+      "answer": "red",
+      "expected_color": "red",
+      "usage": {
+        "prompt_tokens": 94,
+        "total_tokens": 96,
+        "completion_tokens": 2,
+        "prompt_tokens_details": null
+      },
+      "elapsed_ms": 33322.997651999685,
+      "scope": "single synthetic solid-color image; not an OCR or filling accuracy test"
+    },
+    "final_text": {
+      "status": "passed",
+      "model_id": "smartfill-qwen3.5-9b",
+      "response_model": "smartfill-qwen3.5-9b",
+      "text_response": "SMARTFILL_OK",
+      "probe_match": true,
+      "usage": {
+        "prompt_tokens": 20,
+        "completion_tokens": 5,
+        "total_tokens": 25
+      },
+      "elapsed_ms": 12491.078979000122,
+      "scope": "model registration and text connectivity only; no filling or vision evaluation"
+    },
+    "final_vision": {
+      "status": "passed",
+      "model_id": "smartfill-qwen3.5-9b",
+      "answer": "red",
+      "expected_color": "red",
+      "usage": {
+        "prompt_tokens": 94,
+        "total_tokens": 96,
+        "completion_tokens": 2,
+        "prompt_tokens_details": null
+      },
+      "elapsed_ms": 7600.0626439999905,
+      "scope": "single synthetic solid-color image; not an OCR or filling accuracy test"
+    },
+    "environment_update_refused_while_service_active": true,
+    "WSL_to_server": "SSH local forwarding; model endpoint listens on server loopback only"
+  },
+  "real_chat_requests_completed": 4,
+  "task_model_runs": 0,
+  "independently_human_reviewed_tasks": 0,
+  "limitations": [
+    "single synthetic image is not OCR evaluation",
+    "15 development tasks have not been filled by Qwen",
+    "GPU memory observations are snapshots, not resource isolation guarantees",
+    "probe times include startup/runtime warmup effects; not a throughput benchmark",
+    "no system autostart; WSL SSH tunnel must be recreated after disconnect"
+  ]
+}

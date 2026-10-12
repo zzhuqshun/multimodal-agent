@@ -2,7 +2,7 @@
 
 当前阶段：0.1.0 数据契约、15组模拟开发任务、实际文件规则基线与独立评测。开发环境为 WSL Ubuntu，工作目录为 /home/user773/multimodal_agent。
 
-已实现统一Pydantic模型、跨对象一致性检查、两个手工样例、JSON Schema导出、3模板/15组模拟任务生成与审计，以及从实际PDF/Excel空白表和UTF-8参考材料生成可信JSON草稿的规则基线。预测先独立保存，再加载答案评测；尚未调用OCR或模型。
+已实现统一Pydantic模型、跨对象一致性检查、两个手工样例、JSON Schema导出、3模板/15组模拟任务生成与审计，以及从实际PDF/Excel空白表和UTF-8参考材料生成可信JSON草稿的规则基线。预测先独立保存，再加载答案评测；模型服务已部署并通过文字/图片连通探针；尚未接入OCR或Qwen自动填报。
 
 ## 运行
 
@@ -65,13 +65,24 @@ JSON Schema可校验结构和基础类型，跨对象引用及状态约束由Pyt
 
 物理核验现支持UTF-8文本、PDF文本区域和Excel单元格。规则解析支持明确矩形边框的文本PDF及单工作表、标签邻接空白合并单元格的Excel；不支持OCR、扫描/旋转PDF、Word、复杂表格和多人员消歧。未知标签进入复核。
 
-正式开发集运行15/15题通过，175字段中163字段填写、12字段按预期拒填，190来源候选和13条计算链通过；100项测试通过。此数据参与开发，不能作为真实业务或未知模板泛化成绩。运行方法、指标分母和异常证据评分限制见[规则基线说明](docs/rule-baseline.md)，真实摘要见[运行报告](docs/rule-baseline-report.json)。
+正式开发集运行15/15题通过，175字段中163字段填写、12字段按预期拒填，190来源候选和13条计算链通过；当前完整121项测试通过。此数据参与开发，不能作为真实业务或未知模板泛化成绩。运行方法、指标分母和异常证据评分限制见[规则基线说明](docs/rule-baseline.md)，真实摘要见[运行报告](docs/rule-baseline-report.json)。
 
 ## 服务器与后续步骤
 
-本地WSL负责框架、数据和规则；计划由服务器运行Qwen，通过OpenAI兼容HTTP接口调用。服务器地址、服务模型ID和密钥由外部配置提供，不硬编码进数据模型。当前.env.example仅为预留约定，CLI尚未加载它或发起网络请求。
+本地WSL负责框架、数据、规则和评测；服务器独立目录运行Qwen3.5-9B，WSL通过SSH转发访问OpenAI兼容HTTP接口。权重、Python环境、缓存和日志集中在/data/zhuqianshun_data/server/qwen3.5-9b，保留已有应用；当前使用GPU 3、单并发、8192上下文，检查时约25GiB显存占用。实际文字及合成图片探针均通过，详见[连通报告](docs/server-connection-report.json)。
 
-后续顺序：服务器环境核验和Qwen部署/连通 → 相同数据上的模型基线比较 → 独立验证数据与OCR扩展。详见docs/runtime-and-server.md。
+CLI新增check-model，从导出的SMARTFILL_MODEL_*环境变量读取地址、模型ID和超时；.env不自动加载。本地.env已配置，未提交Git。在WSL项目根确认自己的.env后执行：
+
+~~~bash
+set -a
+source .env
+set +a
+.venv/bin/python -m smartfill check-model
+~~~
+
+服务器仅监听本机端口；SSH或WSL断开后需重建转发，方法见[运行说明](docs/runtime-and-server.md)。GPU依赖单独固定于docs/requirements-server.lock，不安装到WSL框架环境。
+
+后续顺序：实现Qwen填报输入/输出适配 → 相同15组任务上的模型基线比较 → 独立验证数据与OCR扩展。详见docs/runtime-and-server.md。
 
 公开数据、模型权重、真实业务文件、.env、虚拟环境和运行产物不提交Git。暂未声明本项目开源许可证，仓库可访问不等于数据和模型可重新分发。
 
